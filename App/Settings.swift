@@ -67,6 +67,8 @@ final class AppSettings: ObservableObject {
     @Published var refreshMinutes: Int { didSet { defaults.set(refreshMinutes, forKey: "refreshMinutes") } }
     /// false = "63% left" (Batteries style), true = "37% used" (like Claude's /usage).
     @Published var showsUsed: Bool { didSet { defaults.set(showsUsed, forKey: "showsUsed") } }
+    /// Which tool's "% left" sits next to the menu bar icon (nil = icon only).
+    @Published var menuBarService: Service? { didSet { defaults.set(menuBarService?.rawValue ?? "none", forKey: "menuBarService") } }
     @Published var showInDock: Bool {
         didSet {
             defaults.set(showInDock, forKey: "showInDock")
@@ -95,6 +97,7 @@ final class AppSettings: ObservableObject {
         refreshMinutes = defaults.object(forKey: "refreshMinutes") as? Int ?? 5
         showInDock = defaults.object(forKey: "showInDock") as? Bool ?? true
         showsUsed = defaults.bool(forKey: "showsUsed")
+        menuBarService = Service(rawValue: defaults.string(forKey: "menuBarService") ?? "none")
         claudeSource = ClaudeSource(rawValue: defaults.string(forKey: "claudeSource") ?? "") ?? .auto
         codexSource = CodexSource(rawValue: defaults.string(forKey: "codexSource") ?? "") ?? .auto
         geminiSource = GeminiSource(rawValue: defaults.string(forKey: "geminiSource") ?? "") ?? .auto

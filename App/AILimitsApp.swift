@@ -18,12 +18,13 @@ final class AppModel {
 struct AILimitsApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @ObservedObject private var service = AppModel.shared.service
+    @ObservedObject private var settings = AppModel.shared.settings
 
     var body: some Scene {
         MenuBarExtra {
             MenuContent(service: service)
         } label: {
-            Image(systemName: "gauge.with.dots.needle.67percent")
+            MenuBarLabel(snapshot: service.snapshot, selected: settings.menuBarService)
         }
         .menuBarExtraStyle(.window)
         .commands {
@@ -204,5 +205,46 @@ private struct ProviderRow: View {
                 }
             }
         }
+    }
+}
+
+// MARK: - Menu bar label
+
+/// The gauge icon, plus — if picked in Settings — that tool's logo and how much is left, e.g. ⌁ ✳︎ 63%.
+private struct MenuBarLabel: View {
+    let snapshot: UsageSnapshot
+    let selected: Service?
+
+    var body: some View {
+        if let selected {
+            let usage = snapshot.usage(for: selected)
+            HStack(spacing: 3) {
+                Image(systemName: "gauge.with.dots.needle.67percent")
+                if let logo = Self.logo(selected) { Image(nsImage: logo) }
+                Text(Self.text(usage))
+                    .monospacedDigit()
+            }
+            .help("\(selected.displayName): \(Self.text(usage)) left")
+        } else {
+            Image(systemName: "gauge.with.dots.needle.67percent")
+        }
+    }
+
+    /// "63%", "0%" when the limit is hit, "–" when there's no data.
+    private static func text(_ usage: ProviderUsage?) -> String {
+        guard let window = usage?.asOf(.now).binding else { return "–" }
+        return "\(UsageFormat.leftPercent(window))%"
+    }
+
+    /// Menu bar images must be small template images to tint like system icons.
+    private static func logo(_ service: Service) -> NSImage? {
+        guard let source = NSImage(named: service.iconName) else { return nil }
+        let size = NSSize(width: 14, height: 14)
+        let image = NSImage(size: size, flipped: false) { rect in
+            source.draw(in: rect)
+            return true
+        }
+        image.isTemplate = true
+        return image
     }
 }

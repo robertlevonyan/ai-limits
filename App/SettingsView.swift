@@ -14,6 +14,12 @@ struct SettingsView: View {
                 Picker("Refresh every", selection: $settings.refreshMinutes) {
                     ForEach([2, 5, 10, 15, 30], id: \.self) { Text("\($0) minutes").tag($0) }
                 }
+                Picker("Show in menu bar", selection: $settings.menuBarService) {
+                    Text("Icon only").tag(Service?.none)
+                    ForEach(Service.allCases) { kind in
+                        Text(verbatim: "\(kind.displayName) — % left").tag(Service?.some(kind))
+                    }
+                }
                 Picker("Percentages show", selection: $settings.showsUsed) {
                     Text("What's left (like Batteries)").tag(false)
                     Text("What's used (like Claude /usage)").tag(true)
