@@ -30,9 +30,9 @@ final class UsageService: ObservableObject {
         snapshot = SharedStore.load() ?? .empty
 
         // Re-arm the timer when the interval changes.
-        settings.$refreshMinutes
+        settings.$refreshSeconds
             .removeDuplicates()
-            .sink { [weak self] minutes in self?.schedule(every: minutes) }
+            .sink { [weak self] seconds in self?.schedule(every: seconds) }
             .store(in: &bag)
 
         // Refetch shortly after any settings change (debounced so typing a token doesn't spam requests).
@@ -49,12 +49,13 @@ final class UsageService: ObservableObject {
         Task { await refresh() }
     }
 
-    private func schedule(every minutes: Int) {
+    private func schedule(every seconds: Int) {
         timer?.invalidate()
-        let timer = Timer(timeInterval: TimeInterval(max(1, minutes) * 60), repeats: true) { [weak self] _ in
+        let interval = TimeInterval(max(5, seconds))
+        let timer = Timer(timeInterval: interval, repeats: true) { [weak self] _ in
             Task { await self?.refresh() }
         }
-        timer.tolerance = 15
+        timer.tolerance = min(15, interval * 0.2)
         // .common so it also fires while the menu bar popover is open.
         RunLoop.main.add(timer, forMode: .common)
         self.timer = timer
@@ -90,6 +91,13 @@ final class UsageService: ObservableObject {
 
     private var lastAutoDiagnostics: Date = .distantPast
 
+    /// Shortest gap between network requests per service (their own rate limits), for timer refreshes.
+    /// Pressing Refresh ignores this.
+    private let minimumGap: [Service: TimeInterval] = [.claude: 60, .codex: 30, .gemini: 5]
+    private var lastFetched: [Service: Date] = [:]
+    private var failing: Set<Service> = []
+    private var lastWidgetData: Data?
+
     /// Full report for all tools (raw usage responses and yes/no checks — no tokens).
     func diagnostics() async -> String {
         let fs = settings.fetchSettings
@@ -118,7 +126,14 @@ final class UsageService: ObservableObject {
 
         let enabled = settings.orderedEnabled
         let fetchSettings = settings.fetchSettings
-        let active = enabled.compactMap { fetchers[$0] }
+        let now = Date()
+        let due = enabled.filter { service in
+            // A service that's currently failing is retried once a minute, not every few seconds.
+            let gap = failing.contains(service) ? max(60, minimumGap[service] ?? 0) : (minimumGap[service] ?? 0)
+            return force || now.timeIntervalSince(lastFetched[service] ?? .distantPast) >= gap
+        }
+        due.forEach { lastFetched[$0] = now }
+        let active = due.compactMap { fetchers[$0] }
 
         let results = await withTaskGroup(of: (Service, Result<ProviderUsage, Error>).self) { group in
             for fetcher in active {
@@ -142,13 +157,23 @@ final class UsageService: ObservableObject {
                 stale.error = error.localizedDescription
                 return stale.asOf(.now)
             case nil:
-                return ProviderUsage(service: service, windows: [], error: "Not fetched")
+                // Not due this round: keep what we have.
+                return snapshot.usage(for: service)?.asOf(.now) ?? ProviderUsage(service: service, windows: [], error: "Not fetched yet")
             }
         }
 
         snapshot = UsageSnapshot(providers: providers, updatedAt: .now, enabled: enabled, showsUsed: settings.showsUsed)
         SharedStore.save(snapshot)
-        reloadWidgets()
+        // Only ask WidgetKit to redraw when something visible changed (it rations redraws).
+        for (service, result) in results {
+            if case .failure = result { failing.insert(service) } else { failing.remove(service) }
+        }
+        let visible = providers.map { usage -> ProviderUsage in var copy = usage; copy.fetchedAt = nil; return copy }
+        let widgetData = try? JSONEncoder().encode(UsageSnapshot(providers: visible, updatedAt: .distantPast, enabled: enabled, showsUsed: settings.showsUsed))
+        if force || widgetData != lastWidgetData {
+            lastWidgetData = widgetData
+            reloadWidgets()
+        }
 
         // If something failed, save a diagnostics report automatically (at most every 30 minutes).
         if providers.contains(where: { $0.error != nil }), Date().timeIntervalSince(lastAutoDiagnostics) > 30 * 60 {

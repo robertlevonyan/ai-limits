@@ -64,7 +64,8 @@ final class AppSettings: ObservableObject {
     private let defaults = UserDefaults.standard
 
     @Published var enabled: Set<Service> { didSet { defaults.set(enabled.map(\.rawValue), forKey: "enabled") } }
-    @Published var refreshMinutes: Int { didSet { defaults.set(refreshMinutes, forKey: "refreshMinutes") } }
+    /// How often the app refreshes (seconds). Each service is still asked no more often than it allows.
+    @Published var refreshSeconds: Int { didSet { defaults.set(refreshSeconds, forKey: "refreshSeconds") } }
     /// false = "63% left" (Batteries style), true = "37% used" (like Claude's /usage).
     @Published var showsUsed: Bool { didSet { defaults.set(showsUsed, forKey: "showsUsed") } }
     /// Which tool's "% left" sits next to the menu bar icon (nil = icon only).
@@ -94,7 +95,7 @@ final class AppSettings: ObservableObject {
     init() {
         let stored = defaults.stringArray(forKey: "enabled")?.compactMap(Service.init(rawValue:))
         enabled = Set(stored ?? Service.allCases)
-        refreshMinutes = defaults.object(forKey: "refreshMinutes") as? Int ?? 5
+        refreshSeconds = defaults.object(forKey: "refreshSeconds") as? Int ?? 5
         showInDock = defaults.object(forKey: "showInDock") as? Bool ?? true
         showsUsed = defaults.bool(forKey: "showsUsed")
         menuBarService = Service(rawValue: defaults.string(forKey: "menuBarService") ?? "none")

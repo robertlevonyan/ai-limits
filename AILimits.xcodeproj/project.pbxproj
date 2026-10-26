@@ -120,7 +120,6 @@
 				A1B2C3D40000000000000010 /* Sources */,
 				A1B2C3D40000000000000011 /* Frameworks */,
 				A1B2C3D40000000000000012 /* Resources */,
-				A1B2C3D4E5F6000000000101 /* Stamp build number */,
 				A1B2C3D40000000000000013 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
@@ -146,7 +145,6 @@
 				A1B2C3D40000000000000014 /* Sources */,
 				A1B2C3D40000000000000015 /* Frameworks */,
 				A1B2C3D40000000000000016 /* Resources */,
-				A1B2C3D4E5F6000000000102 /* Stamp build number */,
 			);
 			buildRules = (
 			);
@@ -217,49 +215,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		A1B2C3D4E5F6000000000101 /* Stamp build number */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Stamp build number";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Unique build number per build, so macOS (widget list, Finder, Dock) refreshes cached icons\nBUILD=$(date +%Y%m%d%H%M)\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $BUILD\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A1B2C3D4E5F6000000000102 /* Stamp build number */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Stamp build number";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Unique build number per build, so macOS (widget list, Finder, Dock) refreshes cached icons\nBUILD=$(date +%Y%m%d%H%M)\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $BUILD\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A1B2C3D40000000000000010 /* Sources */ = {
@@ -406,9 +361,9 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Config/App-Info.plist";
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -427,9 +382,9 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Config/App-Info.plist";
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -447,15 +402,15 @@
 				CODE_SIGN_ENTITLEMENTS = Config/AILimitsWidget.entitlements;
 				DEAD_CODE_STRIPPING = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Config/Widget-Info.plist";
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.robertlevonyan.ailimits.widget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.robertlevonyan.ailimits.widgets;
 				PRODUCT_NAME = AILimitsWidget;
 				REGISTER_APP_GROUPS = YES;
 				SKIP_INSTALL = YES;
@@ -469,15 +424,15 @@
 				CODE_SIGN_ENTITLEMENTS = Config/AILimitsWidget.entitlements;
 				DEAD_CODE_STRIPPING = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Config/Widget-Info.plist";
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.robertlevonyan.ailimits.widget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.robertlevonyan.ailimits.widgets;
 				PRODUCT_NAME = AILimitsWidget;
 				REGISTER_APP_GROUPS = YES;
 				SKIP_INSTALL = YES;

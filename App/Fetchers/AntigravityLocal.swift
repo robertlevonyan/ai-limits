@@ -61,39 +61,40 @@ enum AntigravityLocal {
 
     // MARK: Ask it
 
+    /// The endpoint that answered last time. Reused on every refresh so we don't have to scan
+    /// processes and ports (`ps` / `lsof`) every few seconds — that scan is also what makes macOS log
+    /// "Unable to obtain a task name port right for pid …" for system processes it won't let us inspect.
+    private final class EndpointCache: @unchecked Sendable {
+        private let lock = NSLock()
+        private var value: (url: URL, csrf: String)?
+        func get() -> (url: URL, csrf: String)? { lock.lock(); defer { lock.unlock() }; return value }
+        func set(_ newValue: (url: URL, csrf: String)?) { lock.lock(); value = newValue; lock.unlock() }
+    }
+    private static let cache = EndpointCache()
+
     static func fetchQuota(report: inout [String]) async throws -> (windows: [String: UsageWindow], plan: String?) {
+        // Fast path: the server we found before (until Antigravity restarts and it stops answering).
+        if let cached = cache.get() {
+            if let result = try? await query(cached.url, csrf: cached.csrf, report: &report) {
+                return result
+            }
+            cache.set(nil)
+            report.append("Cached endpoint stopped answering — looking for Antigravity again")
+        }
+
         let servers = findServers(report: &report)
         guard !servers.isEmpty else { throw FetchError.notSignedIn("Open Antigravity to show Gemini usage") }
 
-        let body: [String: Any] = [
-            "metadata": ["ideName": "antigravity", "extensionName": "antigravity", "ideVersion": "unknown", "locale": "en"],
-        ]
         var lastError: Error = FetchError.parse("language server didn't answer")
         for server in servers {
             for port in server.ports {
                 for scheme in ["https", "http"] {
                     let url = URL(string: "\(scheme)://127.0.0.1:\(port)/exa.language_server_pb.LanguageServerService/GetUserStatus")!
-                    var request = URLRequest(url: url)
-                    request.httpMethod = "POST"
-                    request.timeoutInterval = 4
-                    request.httpBody = try? JSONSerialization.data(withJSONObject: body)
-                    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                    request.setValue("1", forHTTPHeaderField: "Connect-Protocol-Version")
-                    request.setValue(server.csrfToken, forHTTPHeaderField: "X-Codeium-Csrf-Token")
                     do {
-                        let (data, response) = try await session.data(for: request)
-                        let code = (response as? HTTPURLResponse)?.statusCode ?? 0
-                        guard code == 200, let json = try? JSONSerialization.jsonObject(with: data) else {
-                            report.append("\(scheme)://127.0.0.1:\(port): HTTP \(code) \(String(decoding: data.prefix(160), as: UTF8.self))")
-                            lastError = FetchError.http(code, String(decoding: data.prefix(160), as: UTF8.self))
-                            continue
-                        }
-                        let parsed = parse(json)
-                        report.append("\(scheme)://127.0.0.1:\(port): OK — \(parsed.windows.count) model group(s)")
-                        if !parsed.windows.isEmpty { return parsed }
-                        lastError = FetchError.parse("no quotaInfo in GetUserStatus")
+                        let result = try await query(url, csrf: server.csrfToken, report: &report)
+                        cache.set((url, server.csrfToken))
+                        return result
                     } catch {
-                        report.append("\(scheme)://127.0.0.1:\(port): \(error.localizedDescription)")
                         lastError = error
                     }
                 }
@@ -102,10 +103,44 @@ enum AntigravityLocal {
         throw lastError
     }
 
+    private static func query(_ url: URL, csrf: String, report: inout [String]) async throws -> (windows: [String: UsageWindow], plan: String?) {
+        let body: [String: Any] = [
+            "metadata": ["ideName": "antigravity", "extensionName": "antigravity", "ideVersion": "unknown", "locale": "en"],
+        ]
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.timeoutInterval = 4
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("1", forHTTPHeaderField: "Connect-Protocol-Version")
+        request.setValue(csrf, forHTTPHeaderField: "X-Codeium-Csrf-Token")
+        let where_ = "\(url.scheme ?? "")://127.0.0.1:\(url.port ?? 0)"
+        do {
+            let (data, response) = try await session.data(for: request)
+            let code = (response as? HTTPURLResponse)?.statusCode ?? 0
+            guard code == 200, let json = try? JSONSerialization.jsonObject(with: data) else {
+                let text = String(decoding: data.prefix(160), as: UTF8.self)
+                report.append("\(where_): HTTP \(code) \(text)")
+                throw FetchError.http(code, text)
+            }
+            let parsed = parse(json)
+            report.append("\(where_): OK — \(parsed.windows.count) model group(s)")
+            report += parsed.models.map { "  model: \($0)" }
+            guard !parsed.windows.isEmpty else { throw FetchError.parse("no quotaInfo in GetUserStatus") }
+            return (parsed.windows, parsed.plan)
+        } catch let error as FetchError {
+            throw error
+        } catch {
+            report.append("\(where_): \(error.localizedDescription)")
+            throw error
+        }
+    }
+
     /// Walks the whole response for objects that carry `quotaInfo`, grouping by model family.
-    static func parse(_ json: Any) -> (windows: [String: UsageWindow], plan: String?) {
+    static func parse(_ json: Any) -> (windows: [String: UsageWindow], plan: String?, models: [String]) {
         var groups: [String: UsageWindow] = [:]
         var plan: String?
+        var models: [String] = []
 
         func walk(_ node: Any) {
             if let dict = node as? [String: Any] {
@@ -122,6 +157,10 @@ enum AntigravityLocal {
                     else if name.contains("claude") || name.contains("sonnet") || name.contains("opus") { family = "Claude" }
                     else if name.contains("gpt") { family = "GPT" }
                     else { family = nil }
+                    let left: String
+                    if let fraction = Parse.double(quota["remainingFraction"]) { left = "\(Int((fraction * 100).rounded()))%" } else { left = "0% (omitted)" }
+                    let resets = quota["resetTime"] as? String ?? "–"
+                    models.append("\(nameParts.first ?? "?") → \(family ?? "skipped"), left \(left), resets \(resets)")
                     if let family {
                         let remaining = Parse.double(quota["remainingFraction"]) ?? 0 // omitted when exhausted
                         let window = UsageWindow(label: family, usedFraction: 1 - remaining, resetsAt: Parse.isoDate(quota["resetTime"]))
@@ -136,7 +175,7 @@ enum AntigravityLocal {
             }
         }
         walk(json)
-        return (groups, plan)
+        return (groups, plan, models)
     }
 
     // MARK: Localhost TLS (the language server uses a self-signed certificate)

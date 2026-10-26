@@ -77,7 +77,7 @@ private struct SmallView: View {
                                 Text(smallLabel(usage))
                                     .font(.system(.caption, design: .rounded).weight(.semibold))
                                     .monospacedDigit()
-                                    .foregroundStyle(usage.binding?.isExhausted == true ? Color.red : Color.primary)
+                                    .foregroundStyle(usage.isStale ? Color.orange : usage.binding?.isExhausted == true ? Color.red : Color.primary)
                                     .lineLimit(1)
                                     .minimumScaleFactor(0.7)
                             } else {
@@ -121,7 +121,7 @@ private struct MediumView: View {
                     Text(UsageFormat.caption(usage, now: entry.date))
                         .font(.caption2)
                         .monospacedDigit()
-                        .foregroundStyle(usage.binding?.isExhausted == true ? Color.red : Color.secondary)
+                        .foregroundStyle(usage.isStale ? Color.orange : usage.binding?.isExhausted == true ? Color.red : Color.secondary)
                         .lineLimit(1)
                 }
                 .frame(maxWidth: .infinity)
@@ -147,6 +147,9 @@ private struct LargeView: View {
                             Text(usage.service.displayName).font(.headline)
                             if let plan = usage.plan {
                                 Text(plan).font(.caption2).foregroundStyle(.secondary)
+                            }
+                            if usage.isStale {
+                                Text("⚠︎ Not updating").font(.caption2).foregroundStyle(.orange)
                             }
                             Spacer(minLength: 4)
                             Text(UsageFormat.percent(usage, showsUsed: used))
@@ -194,11 +197,123 @@ struct AILimitsWidget: Widget {
     }
 }
 
+// MARK: - One widget per AI (small only)
+
+/// Batteries-style single-device small widget: name, one big ring, % left and when it resets.
+private struct SingleServiceView: View {
+    let entry: UsageEntry
+    let service: Service
+    private var used: Bool { entry.snapshot.showsUsed == true }
+
+    var body: some View {
+        let usage = entry.snapshot.usage(for: service)
+        let enabled = entry.snapshot.enabled.map { $0.contains(service) } ?? true
+        VStack(spacing: 6) {
+            HStack(spacing: 5) {
+                Image(service.iconName)
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 12, height: 12)
+                Text(service.shortName)
+                    .font(.caption.weight(.semibold))
+                    .lineLimit(1)
+                Spacer(minLength: 0)
+                if let plan = usage?.plan {
+                    Text(plan).font(.caption2).foregroundStyle(.secondary).lineLimit(1)
+                }
+            }
+
+            if let usage, enabled {
+                UsageRing(usage: usage, showsUsed: used)
+                    .frame(maxHeight: 70)
+                if let window = usage.binding {
+                    let big = used ? UsageFormat.usedPercent(window) : UsageFormat.leftPercent(window)
+                    let small = used ? UsageFormat.leftPercent(window) : UsageFormat.usedPercent(window)
+                    (Text("\(big)%").font(.system(.title3, design: .rounded).weight(.semibold))
+                     + Text(used ? " used" : " left").font(.caption2).foregroundColor(.secondary))
+                        .monospacedDigit()
+                        .lineLimit(1)
+                    Text("\(small)% \(used ? "left" : "used") · \(UsageFormat.caption(usage, now: entry.date))")
+                        .font(.caption2)
+                        .monospacedDigit()
+                        .foregroundStyle(usage.isStale ? Color.orange : window.isExhausted ? Color.red : Color.secondary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.75)
+                } else {
+                    Text(usage.error ?? "No data yet")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(2)
+                }
+            } else {
+                Spacer(minLength: 0)
+                UsageRing(service: service, window: nil, unavailable: true)
+                    .frame(maxHeight: 56)
+                Text(enabled ? "No data yet" : "Turn on in AI Limits Settings")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                Spacer(minLength: 0)
+            }
+        }
+    }
+}
+
+// Each per-AI widget is spelled out in full (literal kind, name and description). Building them through a
+// shared helper with an interpolated description made WidgetKit hit an internal assertion and crash the
+// whole extension — which hides every AI Limits widget.
+
+struct ClaudeLimitWidget: Widget {
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: "AILimitsClaude", provider: UsageTimeline()) { entry in
+            SingleServiceView(entry: entry, service: .claude)
+                .containerBackground(.background, for: .widget)
+        }
+        .configurationDisplayName("Claude Code")
+        .description("How much of your Claude Code limit is left, and when it resets.")
+        .supportedFamilies([.systemSmall])
+    }
+}
+
+struct CodexLimitWidget: Widget {
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: "AILimitsCodex", provider: UsageTimeline()) { entry in
+            SingleServiceView(entry: entry, service: .codex)
+                .containerBackground(.background, for: .widget)
+        }
+        .configurationDisplayName("ChatGPT Codex")
+        .description("How much of your Codex limit is left, and when it resets.")
+        .supportedFamilies([.systemSmall])
+    }
+}
+
+struct GeminiLimitWidget: Widget {
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: "AILimitsGemini", provider: UsageTimeline()) { entry in
+            SingleServiceView(entry: entry, service: .gemini)
+                .containerBackground(.background, for: .widget)
+        }
+        .configurationDisplayName("Gemini")
+        .description("How much of your Gemini limit is left, and when it resets.")
+        .supportedFamilies([.systemSmall])
+    }
+}
+
 @main
 struct AILimitsWidgetBundle: WidgetBundle {
-    var body: some Widget { AILimitsWidget() }
+    var body: some Widget {
+        AILimitsWidget()
+        ClaudeLimitWidget()
+        CodexLimitWidget()
+        GeminiLimitWidget()
+    }
 }
 
 #Preview(as: .systemSmall) { AILimitsWidget() } timeline: { UsageEntry(date: .now, snapshot: .preview) }
 #Preview(as: .systemMedium) { AILimitsWidget() } timeline: { UsageEntry(date: .now, snapshot: .preview) }
 #Preview(as: .systemLarge) { AILimitsWidget() } timeline: { UsageEntry(date: .now, snapshot: .preview) }
+#Preview("Claude", as: .systemSmall) { ClaudeLimitWidget() } timeline: { UsageEntry(date: .now, snapshot: .preview) }
+#Preview("Gemini", as: .systemSmall) { GeminiLimitWidget() } timeline: { UsageEntry(date: .now, snapshot: .preview) }

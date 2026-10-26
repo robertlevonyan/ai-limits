@@ -1,4 +1,5 @@
 import Foundation
+import Security
 
 /// Claude Code subscription limits (Pro / Max) — the same numbers `/usage` shows in the CLI.
 ///
@@ -32,8 +33,14 @@ actor ClaudeFetcher: UsageFetcher {
     private func fetchFresh(_ settings: FetchSettings) async throws -> ProviderUsage {
         switch settings.claudeSource {
         case .auto:
-            let (token, plan) = try cliCredentials()
-            return try await fetchOAuth(token: token, plan: plan)
+            let (token, plan) = try await validCLIToken()
+            do {
+                return try await fetchOAuth(token: token, plan: plan)
+            } catch FetchError.http(401, _) {
+                // Token was revoked early — renew once and retry.
+                let (fresh, plan) = try await validCLIToken(forceRefresh: true)
+                return try await fetchOAuth(token: fresh, plan: plan)
+            }
         case .token:
             guard !settings.claudeToken.isEmpty else { throw FetchError.notSignedIn("Paste an OAuth token in Settings") }
             return try await fetchOAuth(token: settings.claudeToken, plan: nil)
@@ -63,7 +70,7 @@ actor ClaudeFetcher: UsageFetcher {
         lines.append("")
         let token: String?
         switch settings.claudeSource {
-        case .auto: token = try? cliCredentials().token
+        case .auto: token = try? await validCLIToken().token
         case .token: token = settings.claudeToken.isEmpty ? nil : settings.claudeToken
         case .webSession: token = nil
         }
@@ -97,10 +104,25 @@ actor ClaudeFetcher: UsageFetcher {
         return try usage(from: try await HTTP.json(request), plan: plan)
     }
 
+    private struct CLICredentials {
+        var token: String
+        var plan: String?
+        var refreshToken: String?
+        var expires: Date?
+        var root: [String: Any]
+        var fromKeychain: Bool
+    }
+
     private func cliCredentials() throws -> (token: String, plan: String?) {
+        let creds = try loadCLICredentials()
+        return (creds.token, creds.plan)
+    }
+
+    private func loadCLICredentials() throws -> CLICredentials {
         var raw: String?
+        var fromKeychain = false
         let keychain = Shell.run("/usr/bin/security", ["find-generic-password", "-s", "Claude Code-credentials", "-w"])
-        if keychain.status == 0, !keychain.output.isEmpty { raw = keychain.output }
+        if keychain.status == 0, !keychain.output.isEmpty { raw = keychain.output; fromKeychain = true }
         if raw == nil {
             raw = try? String(contentsOf: Parse.home.appendingPathComponent(".claude/.credentials.json"), encoding: .utf8)
         }
@@ -110,7 +132,79 @@ actor ClaudeFetcher: UsageFetcher {
               let token = oauth["accessToken"] as? String else {
             throw FetchError.notSignedIn("Run `claude` and log in with your subscription")
         }
-        return (token, (oauth["subscriptionType"] as? String)?.capitalized)
+        return CLICredentials(
+            token: token,
+            plan: (oauth["subscriptionType"] as? String)?.capitalized,
+            refreshToken: oauth["refreshToken"] as? String,
+            expires: Parse.unixDate(oauth["expiresAt"]),
+            root: root,
+            fromKeychain: fromKeychain
+        )
+    }
+
+    /// Claude Code only renews its login while you use it, so after a quiet weekend the saved token is
+    /// expired. Renew it the same way Claude Code does and save the new login back where Claude Code
+    /// keeps it (refresh tokens rotate, so Claude Code needs the new one too).
+    private func validCLIToken(forceRefresh: Bool = false) async throws -> (token: String, plan: String?) {
+        var creds = try loadCLICredentials()
+        let expired = creds.expires.map { $0 < Date().addingTimeInterval(60) } ?? false
+        guard forceRefresh || expired else { return (creds.token, creds.plan) }
+        guard let refreshToken = creds.refreshToken else {
+            throw FetchError.notSignedIn("Claude Code login expired — run `claude` once")
+        }
+
+        var lastError: Error = FetchError.notSignedIn("Claude Code login expired — run `claude` once")
+        for endpoint in ["https://console.anthropic.com/v1/oauth/token", "https://platform.claude.com/v1/oauth/token"] {
+            let request = HTTP.postJSON(URL(string: endpoint)!, body: [
+                "grant_type": "refresh_token",
+                "refresh_token": refreshToken,
+                "client_id": "9d1c250a-e61b-44d9-88ed-5944d1962f5e", // Claude Code's public OAuth client
+            ], headers: ["User-Agent": "ai-limits-widget"])
+            do {
+                let json = try await HTTP.json(request)
+                guard let access = json["access_token"] as? String else { throw FetchError.parse("no access_token") }
+                var oauth = creds.root["claudeAiOauth"] as? [String: Any] ?? [:]
+                oauth["accessToken"] = access
+                if let newRefresh = json["refresh_token"] as? String { oauth["refreshToken"] = newRefresh }
+                if let seconds = Parse.double(json["expires_in"]) {
+                    oauth["expiresAt"] = Int((Date().timeIntervalSince1970 + seconds) * 1000)
+                }
+                creds.root["claudeAiOauth"] = oauth
+                save(creds)
+                return (access, creds.plan)
+            } catch {
+                lastError = error
+            }
+        }
+        if case FetchError.http(let code, _)? = lastError as? FetchError, code == 400 || code == 401 {
+            throw FetchError.notSignedIn("Claude Code login expired — run `claude` once")
+        }
+        throw lastError
+    }
+
+    /// Writes the renewed login back to Claude Code's Keychain item (or its credentials file).
+    private func save(_ creds: CLICredentials) {
+        guard let data = try? JSONSerialization.data(withJSONObject: creds.root),
+              let json = String(data: data, encoding: .utf8) else { return }
+        if creds.fromKeychain {
+            let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
+                                        kSecAttrService as String: "Claude Code-credentials"]
+            let status = SecItemUpdate(query as CFDictionary, [kSecValueData as String: Data(json.utf8)] as CFDictionary)
+            if status != errSecSuccess {
+                // Fall back to the `security` tool (it's already on the item's access list).
+                let info = Shell.run("/usr/bin/security", ["find-generic-password", "-s", "Claude Code-credentials"]).output
+                var account = NSUserName()
+                if let regex = try? NSRegularExpression(pattern: #""acct"<blob>="([^"]*)""#),
+                   let match = regex.firstMatch(in: info, range: NSRange(info.startIndex..., in: info)),
+                   let range = Range(match.range(at: 1), in: info) {
+                    account = String(info[range])
+                }
+                Shell.run("/usr/bin/security", ["add-generic-password", "-U", "-s", "Claude Code-credentials", "-a", account, "-w", json])
+            }
+        } else {
+            let url = Parse.home.appendingPathComponent(".claude/.credentials.json")
+            try? data.write(to: url, options: .atomic)
+        }
     }
 
     // MARK: claude.ai web session

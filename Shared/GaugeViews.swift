@@ -49,6 +49,7 @@ enum UsageFormat {
 
     static func caption(_ usage: ProviderUsage, now: Date) -> String {
         if usage.windows.isEmpty { return usage.error == nil ? "No data" : "Not signed in" }
+        if usage.isStale { return "⚠︎ Not updating" }
         return reset(usage.binding, now: now)
     }
 }

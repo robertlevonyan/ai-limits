@@ -1,0 +1,166 @@
+== registered
++    com.robertlevonyan.ailimits.widget(1.0)
+	            Path = /Users/robert/Library/Developer/Xcode/DerivedData/AILimits-hjumuriczmpqfigiagzenzmscnvi/Build/Products/Debug/AI Limits.app/Contents/PlugIns/AILimitsWidget.appex
+	            UUID = 7AC14844-0F06-4271-80EB-8A299AEFAD18
+	       Timestamp = 2026-10-26 09:29:12 +0000
+	             SDK = com.apple.widgetkit-extension
+	   Parent Bundle = /Users/robert/Library/Developer/Xcode/DerivedData/AILimits-hjumuriczmpqfigiagzenzmscnvi/Build/Products/Debug/AI Limits.app
+	    Display Name = AI Limits
+	      Short Name = AI Limits
+	     Parent Name = AI Limits
+	        Platform = macOS
+
+ (1 plug-in)
+== all widget extensions mentioning limits
+	        Platform = macOS
+
++    com.robertlevonyan.ailimits.widget(1.0)
+	            Path = /Users/robert/Library/Developer/Xcode/DerivedData/AILimits-hjumuriczmpqfigiagzenzmscnvi/Build/Products/Debug/AI Limits.app/Contents/PlugIns/AILimitsWidget.appex
+	            UUID = 7AC14844-0F06-4271-80EB-8A299AEFAD18
+	       Timestamp = 2026-10-26 09:29:12 +0000
+	             SDK = com.apple.widgetkit-extension
+	   Parent Bundle = /Users/robert/Library/Developer/Xcode/DerivedData/AILimits-hjumuriczmpqfigiagzenzmscnvi/Build/Products/Debug/AI Limits.app
+	    Display Name = AI Limits
+	      Short Name = AI Limits
+	     Parent Name = AI Limits
+	        Platform = macOS
+
+     com.apple.printcenter.PrintCenterWidget(1.0)
+	            Path = /System/Applications/Utilities/Print Center.app/Contents/PlugIns/PrintCenterWidgetExtension.macOS.appex
+	            UUID = 9F9A4624-F68D-58DC-B898-CA446EACA6B0
+	       Timestamp = 2026-09-29 09:40:31 +0000
+== signature
+Executable=/Users/robert/Library/Developer/Xcode/DerivedData/AILimits-hjumuriczmpqfigiagzenzmscnvi/Build/Products/Debug/AI Limits.app/Contents/PlugIns/AILimitsWidget.appex/Contents/MacOS/AILimitsWidget
+Identifier=com.robertlevonyan.ailimits.widget
+Format=bundle with Mach-O thin (arm64)
+CodeDirectory v=20500 size=462 flags=0x10000(runtime) hashes=3+7 location=embedded
+Signature size=4798
+Authority=Apple Development: robertlevonyan91@gmail.com (6W8EVU9X9V)
+Authority=Apple Worldwide Developer Relations Certification Authority
+Authority=Apple Root CA
+Signed Time=Oct 26, 2026 at 13:29:11
+Info.plist entries=24
+TeamIdentifier=LBKJHBH5UN
+Runtime Version=27.0.0
+signature OK
+== widget system log (last 20 min)
+	
+	]> intransientState:<RBAssertionIntransientState| strt:Unspecified end:WarnOnly nvld:0.00 warn:0.00dom runningReason:0 legRes:0 doms:com.apple.webkit:BoostedJetsam invOnConds:(null)> processState:<RBProcessState| role:None> suspended: attributes:[
+	<RBSDomainAttribute| domain:"com.apple.webkit" name:"BoostedJetsam" sourceEnvironment:"(null)">
+	]><RBConnectionClient| 42234 name:app<application.com.apple.Terminal.1152921500311915865.1152921500311915870(501)> entitlements:<RBEntitlements| [
+			com.apple.assertiond.app-state-monitor
+			]> inheritanceManager:<RBClientInheritanceManager|  inheritances:[
+	<RBSInheritance| environment:(none) name:com.apple.launchservices.userfacing origID:424-391-365939 0>
+	]>><RBAssertion| identifier:424-391-368669 target:[extension<com.apple.podcasts.widget[config:6E69CA09-34E3-3493-B8FC-B5021E1ACB71]((null):45366)(501)>[uuid:68BCA48D-0F54-41E7-AD54-F6230AC8C565]:45384] explanation:"backgroundApp:45384" active originator:[osservice<com.apple.coreservices.launchservicesd>:391] transientState:<RBAssertionTransientState| policies:[
+	
+	]> intransientState:<RBAssertionIntransientState| strt:Unspecified end:WarnOnly nvld:0.00 warn:0.00dom runningReason:20249 legRes:0 doms:com.apple.launchservicesd:RoleNonUserInteractive invOnConds:(null)> processState:<RBProcessState| role:NonUserInteractive> suspended: attributes:[
+	<RBSDomainAttribute| domain:"com.apple.launchservicesd" name:"RoleNonUserInteractive" sourceEnvironment:"(null)">
+	]><RBAssertion| identifier:424-419-368984 target:[app<application.com.anthropic.claudefordesktop.30242361.30242368(501)>:74244] explanation:"FUSBProcessWindowState: visible" active originator:[osservice<com.apple.WindowServer(88)>:419] transientState:<RBAssertionTransientState| policies:[
+	
+	] tags:[
+	SupportsBackgroundAudio> intransientState:<RBAssertionIntransientState| strt:Unspecified end:WarnOnly nvld:0.00 warn:0.00dreldom prevSus runningReason:10000 legRes:0 doms:com.apple.fuseboard:Visible invOnConds:(null)> processState:<RBProcessState| role:UserInteractiveNonFocal> suspended: attributes:[
+	<RBSDomainAttribute| domain:"com.apple.fuseboard" name:"Visible" sourceEnvironment:"(null)">,
+	<RBSAcquisitionCompletionAttribute| policy:AfterApplication>
+	]><RBAssertion| identifier:424-391-190843 target:[app<application.com.apple.TV.1152921500311905480.1152921500311905485(501)>:52657] explanation:"foregroundApp:52657" active originator:[osservice<com.apple.coreservices.launchservicesd>:391] transientState:<RBAssertionTransientState| policies:[
+	
+	]> intransientState:<RBAssertionIntransientState| strt:Unspecified end:WarnOnly nvld:0.00 warn:0.00dom prevSus runningReason:20248 legRes:0 doms:com.apple.launchservicesd:RoleUserInteractiveNonFocal invOnConds:(null)> processState:<RBProcessState| role:UserInteractiveNonFocal> suspended: attributes:[
+	<RBSDomainAttribute| domain:"com.apple.launchservicesd" name:"RoleUserInteractiveNonFocal" sourceEnvironment:"(null)">
+	]><RBConnectionClient| 4943 name:xpcservice<com.apple.CoreSimulator.SimulatorTrampoline(no host)(501)>{vt hash: 0}{definition:com.apple.CoreSimulator.SimulatorTrampoline[standard][user]}:4943 entitlements:<RBEntitlements| [
+			com.apple.assertiond.app-state-monitor
+			]> inheritanceManager:<RBClientInheritanceManager| >><RBConnectionClient| 37009 name:osservice<com.apple.cloudd> entitlements:<RBEntitlements| [
+			com.apple.assertiond.app-state-monitor
+			]> inheritanceManager:<RBClientInheritanceManager| >><RBAssertion| identifier:424-362-341849 target:[osservice<com.apple.WindowServer(88)>:419] explanation:"App is holding power assertion" active originator:[osservice<com.apple.powerd>:362] transientState:<RBAssertionTransientState| policies:[
+	
+	]> intransientState:<RBAssertionIntransientState| strt:Unspecified end:WarnOnly nvld:0.00 warn:0.00dom prevSus runningReason:20244 legRes:0 doms:com.apple.appnap:PowerAssertion invOnConds:(null)> processState:<RBProcessState| role:Background> suspended: attributes:[
+	<RBSDomainAttribute| domain:"com.apple.appnap" name:"PowerAssertion" sourceEnvironment:"(null)">,
+	<RBSAcquisitionCompletionAttribute| policy:AfterApplication>
+	]><RBAssertion| identifier:424-391-1353 target:[xpcservice<com.apple.CoreSimulator.CoreSimulatorService(no host)(501)>{vt hash: 0}{definition:com.apple.CoreSimulator.CoreSimulatorService[standard][user]}:4924:4924] explanation:"backgroundApp:4924" active originator:[osservice<com.apple.coreservices.launchservicesd>:391] transientState:<RBAssertionTransientState| policies:[
+	
+	]> intransientState:<RBAssertionIntransientState| strt:Unspecified end:WarnOnly nvld:0.00 warn:0.00dom prevSus runningReason:20249 legRes:0 doms:com.apple.launchservicesd:RoleNonUserInteractive invOnConds:(null)> processState:<RBProcessState| role:NonUserInteractive> suspended: attributes:[
+	<RBSDomainAttribute| domain:"com.apple.launchservicesd" name:"RoleNonUserInteractive" sourceEnvironment:"(null)">
+	]><RBAssertion| identifier:424-738-913 target:[app<application.theboringteam.boringnotch.2042383.2042391(501)>:3277] explanation:"com.apple.frontboard.after-life.interrupted" originator:[osservice<com.apple.MenuBarAgent(501)>:738] intransientState:<RBAssertionIntransientState| strt:After-Originator-Exit end:Invalidate nvld:30.00 warn:0.00dom prevSus runningReason:10001 legRes:0 doms:com.apple.frontboard:AfterLife-Interrupted invOnConds:(null)> suspended: attributes:[
+	<RBSDomainAttribute| domain:"com.apple.frontboard" name:"AfterLife-Interrupted" sourceEnvironment:"(null)">
+	]><RBProcessMonitorObserver| qos:17 qos:<RBSProcessStateDescriptor| values:19> configs:{
+		1="M5108-1"
+	}><RBAssertion| identifier:424-3277-907 target:[xpcservice<com.apple.sharing.ShareSheetUI([app<application.theboringteam.boringnotch.2042383.2042391(501)>:3277])(501)>{vt hash: 0}{definition:com.apple.sharing.ShareSheetUI[extension][client]}:3450] explanation:"com.apple.extension.session" active originator:[app<application.theboringteam.boringnotch.2042383.2042391(501)>:3277] transientState:<RBAssertionTransientState| policies:[
+	LaunchTAL=InvalidateAndTerminateProcess
+	NonUserInteractive=InvalidateAndTerminateProcess
+	Background=InvalidateAndTerminateProcess
+	
+	] tags:[
+	Extension> intransientState:<RBAssertionIntransientState| strt:Fixed end:WarnOnly nvld:0.00 warn:0.00suspdrel prevSus runningReason:0 legRes:13 doms:(null) invOnConds:{
+    therm = 850;
+}> processState:<RBProcessState| role:UserInteractiveNonFocal> suspended: attributes:[
+	<RBSLegacyAttribute| requestedReason:ViewService reason:Extension flags:( AllowIdleSleep PreventTaskSuspend PreventTaskThrottleDown WantsForegroundResourcePriority )>,
+	<RBSAcquisitionCompletionAttribute| policy:AfterValidation>
+	]><RBAssertion| identifier:424-391-223886 target:[app<application.com.anthropic.claudefordesktop.30242361.30242368(501)>:74244] explanation:"foregroundApp:74244" active originator:[osservice<com.apple.coreservices.launchservicesd>:391] transientState:<RBAssertionTransientState| policies:[
+	
+	]> intransientState:<RBAssertionIntransientState| strt:Unspecified end:WarnOnly nvld:0.00 warn:0.00dom prevSus runningReason:20248 legRes:0 doms:com.apple.launchservicesd:RoleUserInteractiveNonFocal invOnConds:(null)> processState:<RBProcessState| role:UserInteractiveNonFocal> suspended: attributes:[
+	<RBSDomainAttribute| domain:"com.apple.launchservicesd" name:"RoleUserInteractiveNonFocal" sourceEnvironment:"(null)">
+	]><RBConnectionClient| 68604 name:osservice<com.apple.GamePolicyAgent(501)> entitlements:<RBEntitlements| [
+			com.apple.assertiond.app-state-monitor
+			]> inheritanceManager:<RBClientInheritanceManager| >><RBConnectionClient| 652 name:osservice<com.apple.filesystems.fskitd> entitlements:<RBEntitlements| [
+			com.apple.assertiond.app-state-monitor,
+			com.apple.runningboard.terminateprocess
+			]> inheritanceManager:<RBClientInheritanceManager| >><RBAssertion| identifier:424-419-368985 target:[app<application.com.robertlevonyan.ailimits.30313702.31032038.22EC7194-F063-4126-823D-CD2E82930022(501)>:45335] explanation:"FUSBProcessWindowState: visible" active originator:[osservice<com.apple.WindowServer(88)>:419] transientState:<RBAssertionTransientState| policies:[
+	
+	] tags:[
+	SupportsBackgroundAudio> intransientState:<RBAssertionIntransientState| strt:Unspecified end:WarnOnly nvld:0.00 warn:0.00dreldom prevSus runningReason:10000 legRes:0 doms:com.apple.fuseboard:Visible invOnConds:(null)> processState:<RBProcessState| role:UserInteractiveNonFocal> suspended: attributes:[
+	<RBSDomainAttribute| domain:"com.apple.fuseboard" name:"Visible" sourceEnvironment:"(null)">,
+	<RBSAcquisitionCompletionAttribute| policy:AfterApplication>
+	]><RBConnectionClient| 501 name:osservice<com.apple.security.syspolicy> entitlements:<RBEntitlements| [
+			com.apple.assertiond.app-state-monitor
+			]> inheritanceManager:<RBClientInheritanceManager| >><RBAssertion| identifier:424-3450-980 target:[xpcservice<com.apple.WebKit.GPU([xpcservice<com.apple.sharing.ShareSheetUI([app<application.theboringteam.boringnotch.2042383.2042391(501)>:3277])(501)>{vt hash: 0}{definition:com.apple.sharing.ShareSheetUI[extension][client]}:3450])(501)>{vt hash: 0}[uuid:7B7882A9-A2E3-43C4-929E-7CCE9A045E4E]{definition:com.apple.WebKit.GPU[standard][client]}:3580:3580](GPUProcess3580) explanation:"Jetsam Boost" active originator:[xpcservice<com.apple.sharing.ShareSheetUI([app<application.theboringteam.boringnotch.2042383.2042391(501)>:3277])(501)>{vt hash: 0}{definition:com.apple.sharing.ShareSheetUI[extension][client]}:3450] transientState:<RBAssertionTransientState| policies:[
+	
+	]> intransientState:<RBAssertionIntransientState| strt:Unspecified end:WarnOnly nvld:0.00 warn:0.00dom runningReason:0 legRes:0 doms:com.apple.webkit:BoostedJetsam invOnConds:(null)> processState:<RBProcessState| role:None> suspended: attributes:[
+	<RBSDomainAttribute| domain:"com.apple.webkit" name:"BoostedJetsam" sourceEnvironment:"(null)">
+	]><RBAssertion| identifier:424-30709-155402 target:[xpcservice<com.apple.SafariPlatformSupport.Helper([app<application.com.google.Chrome.388492.29288702.8F444933-5E7B-4EBF-8104-9931D4266429(501)>:30652])(501)>{vt hash: 0}{definition:com.apple.SafariPlatformSupport.Helper[standard][client]}:30709:30709] explanation:"AppNap adapter assertion" active originator:[xpcservice<com.apple.SafariPlatformSupport.Helper([app<application.com.google.Chrome.388492.29288702.8F444933-5E7B-4EBF-8104-9931D4266429(501)>:30652])(501)>{vt hash: 0}{definition:com.apple.SafariPlatformSupport.Helper[standard][client]}:30709:30709] transientState:<RBAssertionTransientState| policies:[
+	
+	]> intransientState:<RBAssertionIntransientState| strt:Unspecified end:WarnOnly nvld:0.00 warn:0.00dom prevSus runningReason:20243 legRes:0 doms:com.apple.appnap:Enable,com.apple.appnap:Inactive,com.apple.appnap:PreventDiskThrottle,com.apple.appnap:PreventSuppressedCPU,com.apple.appnap:PreventLowPriorirtyCPU,com.apple.appnap:PreventBackgroundSockets,com.apple.appnap:PreventTimerThrottleTier0 invOnConds:(null)> processState:<RBProcessState| role:Background> suspended: attributes:[
+	<RBSAcquisitionCompletionAttribute| policy:AfterApplication>,
+	<RBSDomainAttribute| domain:"com.apple.appnap" name:"Enable" sourceEnvironment:"(null)">,
+	<RBSDomainAttribute| domain:"com.apple.appnap" name:"Inactive" sourceEnvironment:"(null)">,
+	<RBSDomainAttribute| domain:"com.apple.appnap" name:"PreventDiskThrottle" sourceEnvironment:"(null)">,
+	<RBSDomainAttribute| domain:"com.apple.appnap" name:"PreventSuppressedCPU" sourceEnvironment:"(null)">,
+	<RBSDomainAttribute| domain:"com.apple.appnap" name:"PreventLowPriorirtyCPU" sourceEnvironment:"(null)">,
+	<RBSDomainAttribute| domain:"com.apple.appnap" name:"PreventBackgroundSockets" sourceEnvironment:"(null)">,
+	<RBSDomainAttribute| domain:"com.apple.appnap" name:"PreventTimerThrottleTier0" sourceEnvironment:"(null)">
+	]><RBAssertion| identifier:424-4914-1329 target:extension<com.apple.dt.CoreDevice.Extensions.DeviceFS[config:6E69CA09-34E3-3493-B8FC-B5021E1ACB71]((null):4914)(501)>[uuid:00000000-0000-0000-0000-000000000001] explanation:"RBSLaunchRequest for extension<com.apple.dt.CoreDevice.Extensions.DeviceFS[config:6E69CA09-34E3-3493-B8FC-B5021E1ACB71]((null):4914)(501)>[uuid:00000000-0000-0000-0000-000000000001]" active originator:[osservice<com.apple.fskit.fskit_agent(501)>:4914] transientState:<RBAssertionTransientState| policies:[
+	
+	] tags:[
+	SupportsBackgroundAudio> intransientState:<RBAssertionIntransientState| strt:Unspecified end:WarnOnly nvld:0.00 warn:0.00suspdreldom prevSus runningReason:13 legRes:0 doms:com.apple.extensionkit:BackgroundAppExtension,com.apple.extensionkit:HandleMessage invOnConds:(null)> processState:<RBProcessState| role:UserInteractiveNonFocal> suspended: attributes:[
+	<RBSDomainAttribute| domain:"com.apple.extensionkit" name:"BackgroundAppExtension" sourceEnvironment:"(null)">,
+	<RBSDomainAttribute| domain:"com.apple.extensionkit" name:"HandleMessage" sourceEnvironment:"(null)">
+	]><RBAssertion| identifier:424-738-157880 target:[anon<Google Drive>(501):31772] explanation:"com.apple.frontboard.after-life.interrupted" originator:[osservice<com.apple.MenuBarAgent(501)>:738] intransientState:<RBAssertionIntransientState| strt:After-Originator-Exit end:Invalidate nvld:30.00 warn:0.00dom prevSus runningReason:10001 legRes:0 doms:com.apple.frontboard:AfterLife-Interrupted invOnConds:(null)> suspended: attributes:[
+	<RBSDomainAttribute| domain:"com.apple.frontboard" name:"AfterLife-Interrupted" sourceEnvironment:"(null)">
+	]><RBAssertion| identifier:424-652-1330 target:[extension<com.apple.dt.CoreDevice.Extensions.DeviceFS[config:6E69CA09-34E3-3493-B8FC-B5021E1ACB71]((null):4914)(501)>[uuid:00000000-0000-0000-0000-000000000001]:4926] explanation:"com.apple.extension.session" active originator:[osservice<com.apple.filesystems.fskitd>:652] transientState:<RBAssertionTransientState| policies:[
+	LaunchTAL=InvalidateAndTerminateProcess
+	NonUserInteractive=InvalidateAndTerminateProcess
+	Background=InvalidateAndTerminateProcess
+	
+	] tags:[
+	Extension> intransientState:<RBAssertionIntransientState| strt:Fixed end:WarnOnly nvld:0.00 warn:0.00suspdrel prevSus runningReason:0 legRes:13 doms:(null) invOnConds:{
+    therm = 850;
+}> processState:<RBProcessState| role:NonUserInteractive> suspended: attributes:[
+	<RBSLegacyAttribute| requestedReason:Extension reason:Extension flags:( AllowIdleSleep PreventTaskThrottleDown WantsForegroundResourcePriority )>,
+	<RBSAcquisitionCompletionAttribute| policy:AfterValidation>
+	]><RBAssertion| identifier:424-419-368983 target:[app<application.theboringteam.boringnotch.2042383.2042391(501)>:3277] explanation:"FUSBProcessWindowState: visible" active originator:[osservice<com.apple.WindowServer(88)>:419] transientState:<RBAssertionTransientState| policies:[
+	
+	] tags:[
+	SupportsBackgroundAudio> intransientState:<RBAssertionIntransientState| strt:Unspecified end:WarnOnly nvld:0.00 warn:0.00dreldom prevSus runningReason:10000 legRes:0 doms:com.apple.fuseboard:Visible invOnConds:(null)> processState:<RBProcessState| role:UserInteractiveNonFocal> suspended: attributes:[
+	<RBSDomainAttribute| domain:"com.apple.fuseboard" name:"Visible" sourceEnvironment:"(null)">,
+	<RBSAcquisitionCompletionAttribute| policy:AfterApplication>
+	]>
+2026-10-26 13:30:35.917 Df chronod[45366:59591b] [com.apple.chrono:extensions] Ignoring restricted or unknown extension com.robertlevonyan.ailimits
+2026-10-26 13:30:39.394 Df chronod[45366:59591b] [com.apple.chrono:extensions] Ignoring restricted or unknown extension com.robertlevonyan.ailimits
+2026-10-26 13:30:41.494 Df chronod[45366:59591b] [com.apple.chrono:extensions] Ignoring restricted or unknown extension com.robertlevonyan.ailimits
+2026-10-26 13:30:43.872 Df chronod[45366:59591b] [com.apple.chrono:extensions] Ignoring restricted or unknown extension com.robertlevonyan.ailimits
+2026-10-26 13:30:45.973 Df chronod[45366:59591b] [com.apple.chrono:extensions] Ignoring restricted or unknown extension com.robertlevonyan.ailimits
+2026-10-26 13:30:49.874 Df runningboardd[424:595ddd] [com.apple.runningboard:ttl] Acquiring assertion targeting [app<application.com.robertlevonyan.ailimits.30313702.31032038.22EC7194-F063-4126-823D-CD2E82930022(501)>:45335] from originator [app<application.com.robertlevonyan.ailimits.30313702.31032038.22EC7194-F063-4126-823D-CD2E82930022(501)>:45335] with description <RBSAssertionDescriptor| "com.apple.CFNetwork.StorageDB" ID:424-45335-369022 target:45335 attributes:[
+	<RBSDomainAttribute| domain:"com.apple.common" name:"FinishTaskUninterruptable" sourceEnvironment:"(null)">,
+	<RBSAcquisitionCompletionAttribute| policy:AfterApplication>
+	]>
+2026-10-26 13:30:49.874 Df runningboardd[424:595ddd] [com.apple.runningboard:ttl] Assertion 424-45335-369022 (target:[app<application.com.robertlevonyan.ailimits.30313702.31032038.22EC7194-F063-4126-823D-CD2E82930022(501)>:45335]) will be created as inactive as start-time-defining assertions exist
+2026-10-26 13:30:49.877 Df chronod[45366:59591b] [com.apple.chrono:extensions] Ignoring restricted or unknown extension com.robertlevonyan.ailimits
+2026-10-26 13:30:50.922 Df runningboardd[424:596048] [com.apple.runningboard:ttl] Invalidating assertion 424-45335-369022 (target:[app<application.com.robertlevonyan.ailimits.30313702.31032038.22EC7194-F063-4126-823D-CD2E82930022(501)>:45335]) from originator [app<application.com.robertlevonyan.ailimits.30313702.31032038.22EC7194-F063-4126-823D-CD2E82930022(501)>:45335]
+2026-10-26 13:30:51.976 Df chronod[45366:59591b] [com.apple.chrono:extensions] Ignoring restricted or unknown extension com.robertlevonyan.ailimits

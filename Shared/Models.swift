@@ -55,6 +55,9 @@ struct ProviderUsage: Codable, Hashable, Identifiable, Sendable {
 
     var id: Service { service }
 
+    /// Numbers are from an earlier successful refresh; the latest one failed.
+    var isStale: Bool { error != nil && !windows.isEmpty }
+
     /// The window with the least room left — the one that will stop you first.
     var binding: UsageWindow? {
         let headline = windows.filter(\.isHeadline)

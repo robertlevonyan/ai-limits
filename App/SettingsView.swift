@@ -11,9 +11,12 @@ struct SettingsView: View {
     var body: some View {
         Form {
             Section("General") {
-                Picker("Refresh every", selection: $settings.refreshMinutes) {
-                    ForEach([2, 5, 10, 15, 30], id: \.self) { Text("\($0) minutes").tag($0) }
+                Picker("Refresh every", selection: $settings.refreshSeconds) {
+                    ForEach([5, 15, 30, 60, 120, 300, 600, 1800], id: \.self) { seconds in
+                        Text(seconds < 60 ? "\(seconds) seconds" : seconds == 60 ? "1 minute" : "\(seconds / 60) minutes").tag(seconds)
+                    }
                 }
+                Hint("Claude is asked at most once a minute and Codex every 30 seconds — they block apps that ask more often. Gemini (from the running Antigravity) follows this setting. macOS may redraw desktop widgets less often than this.")
                 Picker("Show in menu bar", selection: $settings.menuBarService) {
                     Text("Icon only").tag(Service?.none)
                     ForEach(Service.allCases) { kind in
