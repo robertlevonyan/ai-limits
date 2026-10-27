@@ -236,24 +236,27 @@ actor ClaudeFetcher: UsageFetcher {
 
     private func usage(from json: [String: Any], plan: String?) throws -> ProviderUsage {
         var windows: [UsageWindow] = []
-        func add(_ key: String, _ label: String, headline: Bool) {
+        func add(_ key: String, _ label: String, headline: Bool, blocks: Bool? = nil) {
             guard let window = json[key] as? [String: Any],
                   let utilization = Parse.double(window["utilization"]) else { return }
             windows.append(UsageWindow(
                 label: label,
                 usedFraction: utilization / 100,
                 resetsAt: Parse.isoDate(window["resets_at"]),
-                isHeadline: headline
+                isHeadline: headline,
+                blocks: blocks
             ))
         }
         add("five_hour", "5-hour", headline: true)
-        add("seven_day", "Weekly", headline: true)
+        // The 5-hour session drives the ring, top bar and big number; weekly is shown as a secondary bar
+        // (and still takes over the ring if it's used up — see ProviderUsage.binding).
+        add("seven_day", "Weekly", headline: false, blocks: true)
         add("seven_day_opus", "Opus wk", headline: false)
         add("seven_day_sonnet", "Sonnet wk", headline: false)
         // Paid "extra usage" credits (Team/Enterprise), shown as a secondary bar.
         if let extra = json["extra_usage"] as? [String: Any], extra["is_enabled"] as? Bool == true,
            let utilization = Parse.double(extra["utilization"]) {
-            windows.append(UsageWindow(label: "Extra usage", usedFraction: utilization / 100, resetsAt: nil, isHeadline: false))
+            windows.append(UsageWindow(label: "Extra usage", usedFraction: utilization / 100, resetsAt: nil, isHeadline: false, blocks: false))
         }
 
         guard !windows.isEmpty else { throw FetchError.parse("no five_hour / seven_day") }

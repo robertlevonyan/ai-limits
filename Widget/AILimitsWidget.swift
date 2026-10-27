@@ -225,8 +225,10 @@ private struct SingleServiceView: View {
             }
 
             if let usage, enabled {
+                // Claude also gets a small weekly bar at the bottom, so the ring is a bit smaller.
+                let weekly = service == .claude ? usage.weekly : nil
                 UsageRing(usage: usage, showsUsed: used)
-                    .frame(maxHeight: 70)
+                    .frame(maxHeight: weekly == nil ? 70 : 54)
                 if let window = usage.binding {
                     let big = used ? UsageFormat.usedPercent(window) : UsageFormat.leftPercent(window)
                     let small = used ? UsageFormat.leftPercent(window) : UsageFormat.usedPercent(window)
@@ -240,6 +242,9 @@ private struct SingleServiceView: View {
                         .foregroundStyle(usage.isStale ? Color.orange : window.isExhausted ? Color.red : Color.secondary)
                         .lineLimit(1)
                         .minimumScaleFactor(0.75)
+                    if let weekly, weekly.id != window.id {
+                        MiniWindowBar(window: weekly, now: entry.date, showsUsed: used)
+                    }
                 } else {
                     Text(usage.error ?? "No data yet")
                         .font(.caption2)
@@ -259,6 +264,36 @@ private struct SingleServiceView: View {
                 Spacer(minLength: 0)
             }
         }
+    }
+}
+
+/// Compact one-line bar: "Wk ▬▬▬▭▭ 57%" — used under the Claude widget's ring for the weekly limit.
+private struct MiniWindowBar: View {
+    let window: UsageWindow
+    let now: Date
+    let showsUsed: Bool
+
+    var body: some View {
+        HStack(spacing: 5) {
+            Text("Weekly")
+                .font(.system(size: 9, weight: .medium))
+                .foregroundStyle(.secondary)
+            GeometryReader { geo in
+                ZStack(alignment: .leading) {
+                    Capsule().fill(Color.primary.opacity(0.13))
+                    Capsule().fill(window.tint)
+                        .frame(width: window.remainingFraction <= 0 ? 0 : max(3, geo.size.width * window.remainingFraction))
+                        .widgetAccentable()
+                }
+            }
+            .frame(height: 4)
+            Text("\(showsUsed ? UsageFormat.usedPercent(window) : UsageFormat.leftPercent(window))%")
+                .font(.system(size: 9, weight: .semibold))
+                .monospacedDigit()
+                .foregroundStyle(window.isExhausted ? Color.red : Color.secondary)
+        }
+        .padding(.top, 1)
+        .help(UsageFormat.reset(window, now: now))
     }
 }
 

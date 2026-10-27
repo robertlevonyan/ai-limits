@@ -40,6 +40,9 @@ struct UsageWindow: Codable, Hashable, Identifiable, Sendable {
     var resetsAt: Date?
     /// Headline windows drive the ring. Secondary ones (e.g. per-model caps) only show in the large widget.
     var isHeadline: Bool = true
+    /// A secondary limit that still stops you when it's used up (Claude's weekly). If true and exhausted,
+    /// it takes over the ring even though it isn't the headline window.
+    var blocks: Bool? = nil
 
     var id: String { label }
     var remainingFraction: Double { max(0, min(1, 1 - usedFraction)) }
@@ -60,9 +63,16 @@ struct ProviderUsage: Codable, Hashable, Identifiable, Sendable {
 
     /// The window with the least room left — the one that will stop you first.
     var binding: UsageWindow? {
+        // A secondary limit that's used up (e.g. Claude's weekly) still stops you, so it wins.
+        if let blocked = windows.first(where: { !$0.isHeadline && $0.blocks == true && $0.isExhausted }) {
+            return blocked
+        }
         let headline = windows.filter(\.isHeadline)
         return (headline.isEmpty ? windows : headline).min { $0.remainingFraction < $1.remainingFraction }
     }
+
+    /// Claude's weekly window, shown as a small extra bar in the Claude-only widget.
+    var weekly: UsageWindow? { windows.first { $0.label == "Weekly" } }
 
     /// Projects the usage forward in time: any window whose reset has passed is treated as full again.
     func asOf(_ date: Date) -> ProviderUsage {
@@ -106,7 +116,7 @@ struct UsageSnapshot: Codable, Sendable {
         return UsageSnapshot(providers: [
             ProviderUsage(service: .claude, windows: [
                 UsageWindow(label: "5-hour", usedFraction: 0.38, resetsAt: now.addingTimeInterval(2 * 3600 + 780)),
-                UsageWindow(label: "Weekly", usedFraction: 0.21, resetsAt: now.addingTimeInterval(4 * 86400)),
+                UsageWindow(label: "Weekly", usedFraction: 0.21, resetsAt: now.addingTimeInterval(4 * 86400), isHeadline: false, blocks: true),
             ], plan: "Max", fetchedAt: now),
             ProviderUsage(service: .codex, windows: [
                 UsageWindow(label: "5-hour", usedFraction: 0.84, resetsAt: now.addingTimeInterval(55 * 60)),
