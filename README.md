@@ -48,6 +48,12 @@
 
 Requires macOS 14 Sonoma or later.
 
+## Updates
+
+AI Limits checks this repo's [Releases](https://github.com/robertlevonyan/ai-limits/releases) at launch and every 6 hours. When there's a newer version it asks whether to install it. **Install Update** downloads the DMG, replaces the app and relaunches it. You can also choose **Later** or **Skip This Version**. To check by hand, use **Settings › Updates › Check Now** or **AI Limits › Check for Updates…**.
+
+The app's version comes from the release tag (`v1.2.0` → `1.2.0`). Builds run from Xcode never replace themselves; they open the release page instead.
+
 ## Where the numbers come from
 
 | Tool | Default source | Other options in Settings |

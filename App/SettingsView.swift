@@ -5,6 +5,7 @@ import SwiftUI
 struct SettingsView: View {
     @ObservedObject var settings: AppSettings
     @ObservedObject var service: UsageService
+    @ObservedObject var updater: UpdateChecker
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
     @State private var diagnosticsStatus: String?
 
@@ -53,6 +54,22 @@ struct SettingsView: View {
                     }
                     Spacer()
                 }
+            }
+
+            Section("Updates") {
+                HStack {
+                    Text("Version")
+                    Spacer()
+                    Text("\(updater.currentVersion) (\(updater.currentBuild))").foregroundStyle(.secondary)
+                }
+                Toggle("Check for updates automatically", isOn: $settings.checkForUpdates)
+                HStack {
+                    Button("Check Now") { Task { await updater.check(userInitiated: true) } }
+                        .disabled(updater.status == .checking || updater.status == .downloading || updater.status == .installing)
+                    Spacer()
+                    Text(updateStatusText).font(.caption).foregroundStyle(.secondary)
+                }
+                Hint("Checks github.com/\(UpdateChecker.repository) releases. Installing replaces this copy and relaunches it.")
             }
 
             serviceSection(.claude) {
@@ -131,6 +148,18 @@ struct SettingsView: View {
             diagnosticsStatus = "Couldn't save — but it's copied to the clipboard"
         }
         await service.refresh()
+    }
+
+    private var updateStatusText: String {
+        switch updater.status {
+        case .idle: ""
+        case .checking: "Checking…"
+        case .upToDate: "Up to date"
+        case .available(let v): "Version \(v) available"
+        case .downloading: "Downloading…"
+        case .installing: "Installing…"
+        case .failed(let message): message
+        }
     }
 
     // MARK: - Pieces

@@ -7,10 +7,12 @@ final class AppModel {
     static let shared = AppModel()
     let settings: AppSettings
     let service: UsageService
+    let updater: UpdateChecker
 
     private init() {
         settings = AppSettings()
         service = UsageService(settings: settings)
+        updater = UpdateChecker(settings: settings)
     }
 }
 
@@ -22,12 +24,15 @@ struct AILimitsApp: App {
 
     var body: some Scene {
         MenuBarExtra {
-            MenuContent(service: service)
+            MenuContent(service: service, updater: AppModel.shared.updater)
         } label: {
             MenuBarLabel(snapshot: service.snapshot, selected: settings.menuBarService)
         }
         .menuBarExtraStyle(.window)
         .commands {
+            CommandGroup(after: .appInfo) {
+                Button("Check for Updates…") { Task { await AppModel.shared.updater.check(userInitiated: true) } }
+            }
             CommandGroup(replacing: .appSettings) {
                 Button("Settings…") { SettingsWindowController.shared.show() }
                     .keyboardShortcut(",", modifiers: .command)
@@ -100,7 +105,7 @@ final class SettingsWindowController {
     func show() {
         if window == nil {
             let model = AppModel.shared
-            let hosting = NSHostingController(rootView: SettingsView(settings: model.settings, service: model.service))
+            let hosting = NSHostingController(rootView: SettingsView(settings: model.settings, service: model.service, updater: model.updater))
             let window = HidingWindow(contentViewController: hosting)
             window.title = "AI Limits Settings"
             window.styleMask = [.titled, .closable, .miniaturizable]
@@ -139,6 +144,7 @@ final class SettingsWindowController {
 
 private struct MenuContent: View {
     @ObservedObject var service: UsageService
+    @ObservedObject var updater: UpdateChecker
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: 30)) { context in
@@ -167,6 +173,16 @@ private struct MenuContent: View {
                     .buttonStyle(.borderless)
                     .disabled(service.isRefreshing)
                     .help("Refresh now")
+                }
+
+                if case .available(let version) = updater.status {
+                    Button {
+                        if let release = updater.latest { Task { await updater.install(release) } }
+                    } label: {
+                        Label("Update to \(version)", systemImage: "arrow.down.circle.fill")
+                    }
+                    .buttonStyle(.borderless)
+                    .foregroundStyle(.tint)
                 }
 
                 HStack {

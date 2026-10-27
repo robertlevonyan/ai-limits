@@ -68,6 +68,13 @@ final class AppSettings: ObservableObject {
     @Published var refreshSeconds: Int { didSet { defaults.set(refreshSeconds, forKey: "refreshSeconds") } }
     /// false = "63% left" (Batteries style), true = "37% used" (like Claude's /usage).
     @Published var showsUsed: Bool { didSet { defaults.set(showsUsed, forKey: "showsUsed") } }
+    /// Check GitHub Releases for new versions automatically.
+    @Published var checkForUpdates: Bool { didSet { defaults.set(checkForUpdates, forKey: "checkForUpdates") } }
+    /// A version the user chose to skip (no automatic prompt for it).
+    var skippedVersion: String? {
+        get { defaults.string(forKey: "skippedVersion") }
+        set { defaults.set(newValue, forKey: "skippedVersion") }
+    }
     /// Which tool's "% left" sits next to the menu bar icon (nil = icon only).
     @Published var menuBarService: Service? { didSet { defaults.set(menuBarService?.rawValue ?? "none", forKey: "menuBarService") } }
     @Published var showInDock: Bool {
@@ -99,6 +106,7 @@ final class AppSettings: ObservableObject {
         refreshSeconds = defaults.object(forKey: "refreshSeconds") as? Int ?? 5
         showInDock = defaults.object(forKey: "keepDockIcon") as? Bool ?? false
         showsUsed = defaults.bool(forKey: "showsUsed")
+        checkForUpdates = defaults.object(forKey: "checkForUpdates") as? Bool ?? true
         menuBarService = Service(rawValue: defaults.string(forKey: "menuBarService") ?? "none")
         claudeSource = ClaudeSource(rawValue: defaults.string(forKey: "claudeSource") ?? "") ?? .auto
         codexSource = CodexSource(rawValue: defaults.string(forKey: "codexSource") ?? "") ?? .auto
