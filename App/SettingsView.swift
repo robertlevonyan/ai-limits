@@ -27,7 +27,7 @@ struct SettingsView: View {
                     Text("What's left (like Batteries)").tag(false)
                     Text("What's used (like Claude /usage)").tag(true)
                 }
-                Toggle("Show icon in Dock", isOn: $settings.showInDock)
+                Toggle("Keep icon in Dock when Settings is closed", isOn: $settings.showInDock)
                 Toggle("Launch at login", isOn: $launchAtLogin)
                     .onChange(of: launchAtLogin) { _, enabled in
                         do {

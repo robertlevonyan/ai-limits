@@ -72,8 +72,9 @@ final class AppSettings: ObservableObject {
     @Published var menuBarService: Service? { didSet { defaults.set(menuBarService?.rawValue ?? "none", forKey: "menuBarService") } }
     @Published var showInDock: Bool {
         didSet {
-            defaults.set(showInDock, forKey: "showInDock")
-            NSApp.setActivationPolicy(showInDock ? .regular : .accessory)
+            defaults.set(showInDock, forKey: "keepDockIcon")
+            // Turning it off takes effect when Settings closes (the icon stays while Settings is open).
+            if showInDock { NSApp.setActivationPolicy(.regular) }
             NSApp.activate(ignoringOtherApps: true)
         }
     }
@@ -96,7 +97,7 @@ final class AppSettings: ObservableObject {
         let stored = defaults.stringArray(forKey: "enabled")?.compactMap(Service.init(rawValue:))
         enabled = Set(stored ?? Service.allCases)
         refreshSeconds = defaults.object(forKey: "refreshSeconds") as? Int ?? 5
-        showInDock = defaults.object(forKey: "showInDock") as? Bool ?? true
+        showInDock = defaults.object(forKey: "keepDockIcon") as? Bool ?? false
         showsUsed = defaults.bool(forKey: "showsUsed")
         menuBarService = Service(rawValue: defaults.string(forKey: "menuBarService") ?? "none")
         claudeSource = ClaudeSource(rawValue: defaults.string(forKey: "claudeSource") ?? "") ?? .auto

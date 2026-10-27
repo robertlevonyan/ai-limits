@@ -81,6 +81,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
 // MARK: - Settings window
 
+/// Settings window whose minimize button (and ⌘M) simply hides it instead of sending it to the Dock.
+/// Click the menu bar gauge ▸ Settings…, the Dock icon, or open the app again to bring it back.
+final class HidingWindow: NSWindow {
+    override func performMiniaturize(_ sender: Any?) { orderOut(sender) }
+    override func miniaturize(_ sender: Any?) { orderOut(sender) }
+    override func orderOut(_ sender: Any?) {
+        super.orderOut(sender)
+        MainActor.assumeIsolated { SettingsWindowController.shared.didHide() }
+    }
+}
+
 @MainActor
 final class SettingsWindowController {
     static let shared = SettingsWindowController()
@@ -90,7 +101,7 @@ final class SettingsWindowController {
         if window == nil {
             let model = AppModel.shared
             let hosting = NSHostingController(rootView: SettingsView(settings: model.settings, service: model.service))
-            let window = NSWindow(contentViewController: hosting)
+            let window = HidingWindow(contentViewController: hosting)
             window.title = "AI Limits Settings"
             window.styleMask = [.titled, .closable, .miniaturizable]
             window.isReleasedWhenClosed = false
@@ -98,8 +109,29 @@ final class SettingsWindowController {
             if !window.setFrameUsingName("AILimitsSettings") { window.center() }
             self.window = window
         }
+        // The Dock icon is shown only while Settings is open (unless "Keep icon in Dock" is on).
+        NSApp.setActivationPolicy(.regular)
         NSApp.activate(ignoringOtherApps: true)
         window?.makeKeyAndOrderFront(nil)
+    }
+
+    private var closeObserver: NSObjectProtocol?
+
+    /// Settings minimized/closed: leave the Dock and the app switcher; keep running in the menu bar.
+    func didHide() {
+        guard !AppModel.shared.settings.showInDock else { return }
+        NSApp.setActivationPolicy(.accessory)
+    }
+
+    init() {
+        closeObserver = NotificationCenter.default.addObserver(
+            forName: NSWindow.willCloseNotification, object: nil, queue: .main
+        ) { [weak self] note in
+            MainActor.assumeIsolated {
+                guard let self, (note.object as? NSWindow) === self.window else { return }
+                self.didHide()
+            }
+        }
     }
 }
 
