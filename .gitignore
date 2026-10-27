@@ -63,3 +63,10 @@ fastlane/test_output
 
 # macOS
 .DS_Store
+
+# Local build output and diagnostics
+build/
+*.dmg
+.icncheck/
+ls-paths.txt
+widget-debug.txt

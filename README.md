@@ -41,3 +41,19 @@ Shared/   Models, App Group store, ring views, service logos (both targets)
 ```
 
 If the widget still shows an old version after a rebuild, remove it from the desktop and add it again. If that doesn't help, run `killall chronod NotificationCenter`.
+
+## Releases
+
+Releases are built by GitHub Actions (`.github/workflows/release.yml`) on a macOS runner.
+
+1. Commit and push your changes.
+2. Tag a version and push the tag:
+   ```bash
+   git tag v1.0.0
+   git push origin v1.0.0
+   ```
+3. A few minutes later the release appears under **Releases** with `AI-Limits-1.0.0.dmg`.
+
+You can also start it by hand: **Actions › Release › Run workflow**, then enter a version.
+
+**Signing.** Without an Apple Developer ID the build is unsigned. Users drag the app to Applications and **right-click › Open** it the first time. To ship signed and notarized builds, add these repository secrets: `DEVELOPER_ID_P12_BASE64`, `DEVELOPER_ID_P12_PASSWORD`, `APPLE_TEAM_ID`, `APPLE_ID`, `APPLE_APP_PASSWORD`. The workflow picks them up automatically.

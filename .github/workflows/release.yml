@@ -1,0 +1,105 @@
+name: Release
+
+# Push a tag like v1.0.0 (or run manually) → builds the app on a macOS runner,
+# packages "AI-Limits-<version>.dmg" and publishes a GitHub release with it.
+#
+# Signing:
+#   Without secrets the app is ad-hoc signed ("unsigned"): users open it with right-click ▸ Open.
+#   Add these repository secrets to sign with Developer ID and notarize instead:
+#     DEVELOPER_ID_P12_BASE64   base64 of your "Developer ID Application" certificate (.p12)
+#     DEVELOPER_ID_P12_PASSWORD password of that .p12
+#     APPLE_TEAM_ID             e.g. LBKJHBH5UN
+#     APPLE_ID                  your Apple ID email
+#     APPLE_APP_PASSWORD        app-specific password from appleid.apple.com
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version (e.g. 1.0.0)"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-26
+    env:
+      HAS_SIGNING: ${{ secrets.DEVELOPER_ID_P12_BASE64 != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pick newest Xcode
+        run: |
+          XCODE=$(ls -d /Applications/Xcode*.app | sort -V | tail -1)
+          echo "Using $XCODE"
+          sudo xcode-select -s "$XCODE"
+          xcodebuild -version
+
+      - name: Version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then V="${{ github.event.inputs.version }}"; else V="${GITHUB_REF_NAME#v}"; fi
+          echo "VERSION=$V" >> "$GITHUB_ENV"
+          echo "TAG=v$V" >> "$GITHUB_ENV"
+          echo "BUILD=${{ github.run_number }}" >> "$GITHUB_ENV"
+
+      - name: Import Developer ID certificate
+        if: env.HAS_SIGNING == 'true'
+        env:
+          P12: ${{ secrets.DEVELOPER_ID_P12_BASE64 }}
+          P12_PASSWORD: ${{ secrets.DEVELOPER_ID_P12_PASSWORD }}
+        run: |
+          KEYCHAIN="$RUNNER_TEMP/signing.keychain-db"
+          security create-keychain -p ci "$KEYCHAIN"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN"
+          security unlock-keychain -p ci "$KEYCHAIN"
+          echo "$P12" | base64 --decode > "$RUNNER_TEMP/cert.p12"
+          security import "$RUNNER_TEMP/cert.p12" -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN"
+          security set-key-partition-list -S apple-tool:,apple: -s -k ci "$KEYCHAIN"
+          security list-keychains -d user -s "$KEYCHAIN" $(security list-keychains -d user | tr -d '"')
+
+      - name: Build
+        run: |
+          if [ "$HAS_SIGNING" = "true" ]; then
+            SIGN=(CODE_SIGN_STYLE=Manual "CODE_SIGN_IDENTITY=Developer ID Application"
+                  DEVELOPMENT_TEAM="${{ secrets.APPLE_TEAM_ID }}" OTHER_CODE_SIGN_FLAGS=--timestamp)
+          else
+            SIGN=(CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY=- DEVELOPMENT_TEAM= CODE_SIGNING_REQUIRED=YES)
+          fi
+          xcodebuild -project AILimits.xcodeproj -scheme AILimits -configuration Release \
+            -archivePath "$RUNNER_TEMP/AILimits.xcarchive" archive \
+            MARKETING_VERSION="$VERSION" CURRENT_PROJECT_VERSION="$BUILD" "${SIGN[@]}"
+          cp -R "$RUNNER_TEMP/AILimits.xcarchive/Products/Applications/AI Limits.app" .
+          codesign --verify --deep --strict --verbose=2 "AI Limits.app"
+
+      - name: Package DMG
+        run: |
+          DMG="AI-Limits-$VERSION.dmg"
+          scripts/make-dmg.sh "AI Limits.app" "$DMG"
+          echo "DMG=$DMG" >> "$GITHUB_ENV"
+
+      - name: Sign & notarize DMG
+        if: env.HAS_SIGNING == 'true'
+        run: |
+          codesign --sign "Developer ID Application" --timestamp "$DMG"
+          xcrun notarytool submit "$DMG" --wait \
+            --apple-id "${{ secrets.APPLE_ID }}" --password "${{ secrets.APPLE_APP_PASSWORD }}" --team-id "${{ secrets.APPLE_TEAM_ID }}"
+          xcrun stapler staple "$DMG"
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "$HAS_SIGNING" = "true" ]; then
+            NOTE="Signed and notarized. Open the DMG and drag **AI Limits** to Applications."
+          else
+            NOTE=$'Unsigned build. Open the DMG, drag **AI Limits** to Applications, then **right-click ▸ Open** the first time (macOS blocks unsigned apps on double-click).\n\nIf macOS says the app is damaged, run: `xattr -dr com.apple.quarantine "/Applications/AI Limits.app"`'
+          fi
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$DMG" --clobber
+          else
+            gh release create "$TAG" "$DMG" --title "AI Limits $VERSION" --notes "$NOTE" --generate-notes
+          fi
