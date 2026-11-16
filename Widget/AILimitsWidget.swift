@@ -20,7 +20,11 @@ struct UsageTimeline: TimelineProvider {
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<UsageEntry>) -> Void) {
         let now = Date()
-        let snapshot = SharedStore.load() ?? .empty
+        // If nothing could be read, put the reason on each tool so the widget shows it instead of "No data".
+        let snapshot = SharedStore.load() ?? UsageSnapshot(
+            providers: Service.allCases.map { ProviderUsage(service: $0, windows: [], error: SharedStore.lastLoadProblem ?? "No data yet — is AI Limits running?") },
+            updatedAt: .distantPast
+        )
 
         // Short timeline that ends in 15 minutes: when it runs out WidgetKit asks again and we re-read
         // the shared file, so the widget stays fresh even if the app's reload requests get throttled.

@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.0.10
+- If the widget can't read the app's data, it now shows why (for example "access denied by macOS") instead of "No data".
+
 ## 0.0.9
 - Releases are signed with the team's Apple Development certificate, so the desktop widgets can read the app's data. This needs the `SIGNING_P12_*` secrets; see the README.
 

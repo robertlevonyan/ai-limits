@@ -41,14 +41,33 @@ enum SharedStore {
         return base.appendingPathComponent("AI Limits/\(fileName)")
     }
 
+    /// Why the last `load()` found nothing — shown inside the widget so problems are visible.
+    static var lastLoadProblem: String?
+
     static func load() -> UsageSnapshot? {
-        [groupFileURL, widgetContainerFileURL]
-            .compactMap { $0 }
-            .compactMap { url -> UsageSnapshot? in
-                guard let data = try? Data(contentsOf: url) else { return nil }
-                return try? JSONDecoder().decode(UsageSnapshot.self, from: data)
+        var problems: [String] = []
+        var found: [UsageSnapshot] = []
+        let sources: [(String, URL?)] = [("App Group \(groupID)", groupFileURL), ("widget storage", widgetContainerFileURL)]
+        for (name, url) in sources {
+            guard let url else {
+                problems.append("\(name): unavailable")
+                continue
             }
-            .max { $0.updatedAt < $1.updatedAt }
+            do {
+                let data = try Data(contentsOf: url)
+                found.append(try JSONDecoder().decode(UsageSnapshot.self, from: data))
+            } catch let error as DecodingError {
+                problems.append("\(name): unreadable data (\(String(describing: error).prefix(80)))")
+            } catch {
+                let ns = error as NSError
+                let reason = ns.code == NSFileReadNoSuchFileError ? "no file yet"
+                    : ns.code == NSFileReadNoPermissionError ? "access denied by macOS"
+                    : "\(ns.domain) \(ns.code)"
+                problems.append("\(name): \(reason)")
+            }
+        }
+        lastLoadProblem = found.isEmpty ? problems.joined(separator: " · ") : nil
+        return found.max { $0.updatedAt < $1.updatedAt }
     }
 
     static func save(_ snapshot: UsageSnapshot) {
