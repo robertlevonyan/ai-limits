@@ -85,7 +85,7 @@ Pasted tokens and cookies are kept in your login Keychain.
 2. Under **Signing & Capabilities**, set your team for both targets. Both use the App Group `$(TeamIdentifierPrefix)com.robertlevonyan.ailimits`.
 3. Run the **AILimits** scheme (⌘R).
 
-The project uses folder-synced groups, so files you add to `App/`, `Widget/` or `Shared/` are picked up automatically. After each Debug build, the scheme registers that build's widgets and removes other copies, so the widget list never shows duplicates.
+The project uses folder-synced groups, so files you add to `App/`, `Widget/` or `Shared/` are picked up automatically. After each Debug build, the scheme unregisters Xcode's build, so it doesn't show up in Launchpad or the Apps list. The installed app stays the one macOS lists, along with its widgets.
 
 ```
 App/      Menu bar app: settings, refresh service, fetchers (Claude, Codex, Gemini/Antigravity)
