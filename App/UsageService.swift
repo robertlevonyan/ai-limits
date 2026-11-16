@@ -90,7 +90,8 @@ final class UsageService: ObservableObject {
 
     /// Shortest gap between network requests per service (their own rate limits), for timer refreshes.
     /// Pressing Refresh ignores this.
-    private let minimumGap: [Service: TimeInterval] = [.claude: 60, .codex: 30, .gemini: 5]
+    // Claude: every 3 minutes — its usage endpoint starts returning 429 when asked much more often.
+    private let minimumGap: [Service: TimeInterval] = [.claude: 180, .codex: 30, .gemini: 5]
     private var lastFetched: [Service: Date] = [:]
     private var failing: Set<Service> = []
     private var lastWidgetData: Data?

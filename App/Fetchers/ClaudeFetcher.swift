@@ -12,22 +12,75 @@ import Security
 actor ClaudeFetcher: UsageFetcher {
     let service = Service.claude
 
-    /// Anthropic's usage endpoint rate-limits aggressively (HTTP 429). After a 429 we back off for
-    /// 10 minutes and keep showing the last good numbers instead of an error.
+    /// Anthropic's usage endpoint rate-limits aggressively (HTTP 429). After a 429 we wait — as long as
+    /// its Retry-After says, otherwise 2 → 5 → 10 → 20 → 30 minutes — and make NO request meanwhile.
+    /// While waiting we show the last good numbers (kept across restarts), or read the same limits from
+    /// the rate-limit headers of a tiny Claude request (see `fetchViaMessageHeaders`).
     private var notBefore: Date = .distantPast
-    private var lastGood: ProviderUsage?
+    private var consecutive429 = 0
+    private var lastHeaderProbe: Date = .distantPast
+    private var lastGood: ProviderUsage? = ClaudeFetcher.loadLastGood() {
+        didSet { ClaudeFetcher.saveLastGood(lastGood) }
+    }
 
     func fetch(_ settings: FetchSettings) async throws -> ProviderUsage {
-        if Date() < notBefore, let lastGood { return lastGood }
+        if Date() < notBefore {
+            return try await whileRateLimited(settings)
+        }
         do {
             let usage = try await fetchFresh(settings)
+            consecutive429 = 0
             lastGood = usage
             return usage
-        } catch FetchError.http(429, let body) {
-            notBefore = Date().addingTimeInterval(10 * 60)
-            if let lastGood { return lastGood }
-            throw FetchError.http(429, body)
+        } catch FetchError.http(429, _) {
+            return try await backOff(retryAfter: nil, settings)
+        } catch let RateLimited.wait(seconds) {
+            return try await backOff(retryAfter: seconds, settings)
         }
+    }
+
+    private func backOff(retryAfter seconds: TimeInterval?, _ settings: FetchSettings) async throws -> ProviderUsage {
+        do {
+            consecutive429 += 1
+            let ladder: [TimeInterval] = [120, 300, 600, 1200, 1800]
+            let wait = seconds ?? ladder[min(consecutive429 - 1, ladder.count - 1)]
+            notBefore = Date().addingTimeInterval(wait)
+            return try await whileRateLimited(settings)
+        }
+    }
+
+    /// No calls to the usage endpoint until `notBefore`.
+    private func whileRateLimited(_ settings: FetchSettings) async throws -> ProviderUsage {
+        // Same numbers from response headers, at most every 5 minutes (Claude Code login only).
+        if settings.claudeSource == .auto, Date().timeIntervalSince(lastHeaderProbe) > 300 {
+            lastHeaderProbe = Date()
+            if let creds = try? await validCLIToken(),
+               let usage = try? await fetchViaMessageHeaders(token: creds.token, plan: creds.plan) {
+                lastGood = usage
+                return usage
+            }
+        }
+        if var cached = lastGood {
+            // Older than 10 minutes: still show it, but flagged ("⚠︎ Not updating" in the widget).
+            if let fetched = cached.fetchedAt, Date().timeIntervalSince(fetched) > 600 {
+                cached.error = "Anthropic is rate-limiting usage checks — showing numbers from \(fetched.formatted(date: .omitted, time: .shortened))"
+            }
+            return cached
+        }
+        let minutes = max(1, Int((notBefore.timeIntervalSinceNow / 60).rounded(.up)))
+        throw FetchError.notSignedIn("Anthropic is rate-limiting usage checks — retrying in \(minutes) min")
+    }
+
+    private enum RateLimited: Error { case wait(TimeInterval?) }
+
+    private static let lastGoodKey = "claude.lastGood"
+    private static func loadLastGood() -> ProviderUsage? {
+        guard let data = UserDefaults.standard.data(forKey: lastGoodKey) else { return nil }
+        return try? JSONDecoder().decode(ProviderUsage.self, from: data)
+    }
+    private static func saveLastGood(_ usage: ProviderUsage?) {
+        guard let usage, let data = try? JSONEncoder().encode(usage) else { return }
+        UserDefaults.standard.set(data, forKey: lastGoodKey)
     }
 
     private func fetchFresh(_ settings: FetchSettings) async throws -> ProviderUsage {
@@ -74,7 +127,9 @@ actor ClaudeFetcher: UsageFetcher {
         case .token: token = settings.claudeToken.isEmpty ? nil : settings.claudeToken
         case .webSession: token = nil
         }
-        if let token {
+        if Date() < notBefore {
+            lines.append("Usage endpoint: rate-limited, waiting until \(notBefore) (no request sent)")
+        } else if let token {
             var request = URLRequest(url: URL(string: "https://api.anthropic.com/api/oauth/usage")!)
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             request.setValue("oauth-2025-04-20", forHTTPHeaderField: "anthropic-beta")
@@ -101,7 +156,57 @@ actor ClaudeFetcher: UsageFetcher {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.setValue("oauth-2025-04-20", forHTTPHeaderField: "anthropic-beta")
         request.setValue("ai-limits-widget", forHTTPHeaderField: "User-Agent")
-        return try usage(from: try await HTTP.json(request), plan: plan)
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.timeoutInterval = 20
+        let (data, response) = try await URLSession.shared.data(for: request)
+        let http = response as? HTTPURLResponse
+        let code = http?.statusCode ?? 0
+        if code == 429 {
+            throw RateLimited.wait((http?.value(forHTTPHeaderField: "Retry-After")).flatMap(Double.init))
+        }
+        guard (200..<300).contains(code) else {
+            throw FetchError.http(code, String(decoding: data.prefix(300), as: UTF8.self))
+        }
+        guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            throw FetchError.parse("not a JSON object")
+        }
+        return try usage(from: json, plan: plan)
+    }
+
+    /// Fallback while the usage endpoint is rate-limited: every Claude API response carries the
+    /// subscription's limits in `anthropic-ratelimit-unified-5h-*` / `-7d-*` headers. Sends a minimal
+    /// request (1 output token on the smallest model) — a negligible bit of your usage — and reads them.
+    private func fetchViaMessageHeaders(token: String, plan: String?) async throws -> ProviderUsage {
+        var request = URLRequest(url: URL(string: "https://api.anthropic.com/v1/messages")!)
+        request.httpMethod = "POST"
+        request.timeoutInterval = 20
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("2023-06-01", forHTTPHeaderField: "anthropic-version")
+        request.setValue("oauth-2025-04-20", forHTTPHeaderField: "anthropic-beta")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try JSONSerialization.data(withJSONObject: [
+            "model": "claude-haiku-4-5",
+            "max_tokens": 1,
+            "system": "You are Claude Code, Anthropic's official CLI for Claude.",
+            "messages": [["role": "user", "content": "."]],
+        ])
+        let (_, response) = try await URLSession.shared.data(for: request)
+        guard let http = response as? HTTPURLResponse else { throw FetchError.parse("no response") }
+
+        func header(_ name: String) -> String? { http.value(forHTTPHeaderField: "anthropic-ratelimit-unified-\(name)") }
+        func window(_ key: String, _ label: String, headline: Bool, blocks: Bool?) -> UsageWindow? {
+            guard let utilization = header("\(key)-utilization").flatMap(Double.init) else { return nil }
+            let reset = header("\(key)-reset").flatMap(Double.init).map { Date(timeIntervalSince1970: $0) }
+            // Header values are 0…1 (the usage endpoint uses 0…100).
+            let used = utilization > 1.5 ? utilization / 100 : utilization
+            return UsageWindow(label: label, usedFraction: used, resetsAt: reset, isHeadline: headline, blocks: blocks)
+        }
+        let windows = [window("5h", "5-hour", headline: true, blocks: nil),
+                       window("7d", "Weekly", headline: false, blocks: true)].compactMap { $0 }
+        guard !windows.isEmpty else { throw FetchError.parse("no rate-limit headers (HTTP \(http.statusCode))") }
+        // Keep extra-usage info from the last full read, if any.
+        let extra = lastGood?.windows.filter { $0.label == "Extra usage" } ?? []
+        return ProviderUsage(service: service, windows: windows + extra, plan: plan ?? lastGood?.plan, fetchedAt: .now)
     }
 
     private struct CLICredentials {
