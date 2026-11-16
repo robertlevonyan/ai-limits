@@ -134,7 +134,7 @@ struct SettingsView: View {
         .frame(width: 560, height: 720)
     }
 
-    /// Writes a report (setting names, sizes, yes/no — no token values) to Downloads and reveals it.
+    /// Writes a report (setting names, sizes, yes/no — no token values) to the app's own folder and reveals it.
     private func runDiagnostics() async {
         diagnosticsStatus = "Running…"
         let report = await service.diagnostics()
@@ -143,7 +143,7 @@ struct SettingsView: View {
         NSPasteboard.general.setString(report, forType: .string)
         if let first = saved.first {
             NSWorkspace.shared.activateFileViewerSelecting([first])
-            diagnosticsStatus = "Saved (\(saved.count) location\(saved.count == 1 ? "" : "s")) and copied"
+            diagnosticsStatus = "Saved to the app's folder and copied"
         } else {
             diagnosticsStatus = "Couldn't save — but it's copied to the clipboard"
         }

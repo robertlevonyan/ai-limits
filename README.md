@@ -75,7 +75,7 @@ Click the gauge in the menu bar and choose **Settings…**, or click the app's D
 - **Refresh every.** From 5 seconds to 30 minutes.
 - **Show icon in Dock** and **Launch at login**.
 - **Per tool.** Turn it on or off, pick its source, and see a status line with what the last refresh returned.
-- **Run diagnostics.** Saves a report to `~/Downloads/AILimits-diagnostics.txt`. It contains raw usage responses and yes/no checks, never tokens.
+- **Run diagnostics.** Saves a report to `~/Library/Application Support/AI Limits/diagnostics.txt` and copies it to the clipboard. It contains raw usage responses and yes/no checks, never tokens.
 
 Pasted tokens and cookies are kept in your login Keychain.
 

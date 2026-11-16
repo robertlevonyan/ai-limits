@@ -70,14 +70,11 @@ final class UsageService: ObservableObject {
         }
     }
 
-    /// Where diagnostics reports go: Downloads (easy to find) and a Library folder that never needs
-    /// a privacy prompt (so the report is still saved if macOS blocks Downloads).
+    /// Where diagnostics reports go: the app's own folder,
+    /// ~/Library/Application Support/AI Limits/diagnostics.txt (never Downloads).
     static var diagnosticsURLs: [URL] {
-        let home = FileManager.default.homeDirectoryForCurrentUser
-        return [
-            home.appendingPathComponent("Downloads/AILimits-diagnostics.txt"),
-            home.appendingPathComponent("Library/Developer/Xcode/DerivedData/AILimits-diagnostics.txt"),
-        ]
+        let support = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+        return [support.appendingPathComponent("AI Limits/diagnostics.txt")]
     }
 
     /// Writes the report to every location that accepts it; returns the ones that worked.
