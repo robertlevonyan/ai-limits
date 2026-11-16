@@ -14,15 +14,28 @@ struct UsageTimeline: TimelineProvider {
     }
 
     func getSnapshot(in context: Context, completion: @escaping (UsageEntry) -> Void) {
-        let snapshot = context.isPreview ? .preview : (SharedStore.load() ?? .preview)
-        completion(UsageEntry(date: .now, snapshot: snapshot))
+        if context.isPreview {
+            completion(UsageEntry(date: .now, snapshot: .preview))
+            return
+        }
+        Task {
+            let (snapshot, _) = await SharedStore.loadForWidget()
+            completion(UsageEntry(date: .now, snapshot: snapshot ?? .preview))
+        }
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<UsageEntry>) -> Void) {
+        Task {
+            let (loaded, problem) = await SharedStore.loadForWidget()
+            completion(Self.timeline(loaded: loaded, problem: problem))
+        }
+    }
+
+    private static func timeline(loaded: UsageSnapshot?, problem: String?) -> Timeline<UsageEntry> {
         let now = Date()
         // If nothing could be read, put the reason on each tool so the widget shows it instead of "No data".
-        let snapshot = SharedStore.load() ?? UsageSnapshot(
-            providers: Service.allCases.map { ProviderUsage(service: $0, windows: [], error: SharedStore.lastLoadProblem ?? "No data yet — is AI Limits running?") },
+        let snapshot = loaded ?? UsageSnapshot(
+            providers: Service.allCases.map { ProviderUsage(service: $0, windows: [], error: problem ?? "No data yet — is AI Limits running?") },
             updatedAt: .distantPast
         )
 
@@ -36,7 +49,8 @@ struct UsageTimeline: TimelineProvider {
         dates.sort()
 
         let entries = dates.map { UsageEntry(date: $0, snapshot: snapshot.asOf($0)) }
-        completion(Timeline(entries: entries, policy: .after(horizon)))
+        // Nothing loaded: ask again soon instead of waiting the full 15 minutes.
+        return Timeline(entries: entries, policy: .after(loaded == nil ? now.addingTimeInterval(60) : horizon))
     }
 }
 

@@ -28,6 +28,8 @@ final class UsageService: ObservableObject {
     init(settings: AppSettings) {
         self.settings = settings
         snapshot = SharedStore.load() ?? .empty
+        LocalFeed.shared.publish(snapshot)
+        LocalFeed.shared.start()
 
         // Re-arm the timer when the interval changes.
         settings.$refreshSeconds
@@ -161,6 +163,7 @@ final class UsageService: ObservableObject {
         }
 
         snapshot = UsageSnapshot(providers: providers, updatedAt: .now, enabled: enabled, showsUsed: settings.showsUsed)
+        LocalFeed.shared.publish(snapshot)
         SharedStore.save(snapshot)
         // Only ask WidgetKit to redraw when something visible changed (it rations redraws).
         for (service, result) in results {

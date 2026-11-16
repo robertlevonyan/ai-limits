@@ -10,6 +10,8 @@ import Foundation
 ///    writes there directly (macOS may ask once to allow access to another app's data).
 enum SharedStore {
     static let widgetBundleID = "com.robertlevonyan.ailimits.widgets"
+    /// Loopback port of the app's LocalFeed.
+    static let feedPort: UInt16 = 47863
     private static let fileName = "usage.json"
 
     static var groupID: String {
@@ -68,6 +70,60 @@ enum SharedStore {
         }
         lastLoadProblem = found.isEmpty ? problems.joined(separator: " · ") : nil
         return found.max { $0.updatedAt < $1.updatedAt }
+    }
+
+    /// What the widget uses: asks the running app over 127.0.0.1 first, then reads the shared files.
+    /// Never takes more than a few seconds, so the widget can't get stuck on the grey placeholder
+    /// when macOS holds a file read (container protection prompts can't be shown for a widget).
+    static func loadForWidget() async -> (UsageSnapshot?, String?) {
+        var problems: [String] = []
+        if let snapshot = await loadFromApp(problems: &problems), !snapshot.providers.isEmpty {
+            return (snapshot, nil)
+        }
+        let (fileSnapshot, fileProblem) = await loadFilesWithTimeout(seconds: 3)
+        if let fileSnapshot { return (fileSnapshot, nil) }
+        if let fileProblem { problems.append(fileProblem) }
+        return (nil, problems.joined(separator: " · "))
+    }
+
+    private static func loadFromApp(problems: inout [String]) async -> UsageSnapshot? {
+        guard let url = URL(string: "http://127.0.0.1:\(feedPort)/usage.json") else { return nil }
+        var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 2)
+        request.httpMethod = "GET"
+        let config = URLSessionConfiguration.ephemeral
+        config.timeoutIntervalForRequest = 2
+        config.timeoutIntervalForResource = 3
+        config.connectionProxyDictionary = [:]
+        let session = URLSession(configuration: config)
+        defer { session.finishTasksAndInvalidate() }
+        do {
+            let (data, _) = try await session.data(for: request)
+            return try JSONDecoder().decode(UsageSnapshot.self, from: data)
+        } catch {
+            let ns = error as NSError
+            problems.append(ns.code == NSURLErrorCannotConnectToHost ? "App: not running" : "App: \(ns.localizedDescription)")
+            return nil
+        }
+    }
+
+    private static func loadFilesWithTimeout(seconds: Double) async -> (UsageSnapshot?, String?) {
+        await withCheckedContinuation { continuation in
+            let lock = NSLock()
+            var finished = false
+            let finish: ((UsageSnapshot?, String?)) -> Void = { result in
+                lock.lock(); defer { lock.unlock() }
+                guard !finished else { return }
+                finished = true
+                continuation.resume(returning: result)
+            }
+            DispatchQueue.global(qos: .userInitiated).async {
+                let snapshot = load()
+                finish((snapshot, snapshot == nil ? lastLoadProblem : nil))
+            }
+            DispatchQueue.global().asyncAfter(deadline: .now() + seconds) {
+                finish((nil, "Shared file: macOS didn't allow reading it (timed out)"))
+            }
+        }
     }
 
     static func save(_ snapshot: UsageSnapshot) {

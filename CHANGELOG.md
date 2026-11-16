@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.0.11
+- Fixed desktop widgets staying grey (placeholder) in release builds: the widget now gets its data straight from the running app over 127.0.0.1, and never waits more than a few seconds on the shared file.
+
 ## 0.0.10
 - If the widget can't read the app's data, it now shows why (for example "access denied by macOS") instead of "No data".
 
