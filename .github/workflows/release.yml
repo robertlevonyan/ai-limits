@@ -3,14 +3,23 @@ name: Release
 # Push a tag like v1.0.0 (or run manually) → builds the app on a macOS runner,
 # packages "AI-Limits-<version>.dmg" and publishes a GitHub release with it.
 #
-# Signing:
-#   Without secrets the app is ad-hoc signed ("unsigned"): users open it with right-click ▸ Open.
-#   Add these repository secrets to sign with Developer ID and notarize instead:
+# Signing (repository secrets; the first set that's present wins):
+#
+#   A) Developer ID + notarization (paid Apple Developer account) — opens normally everywhere:
 #     DEVELOPER_ID_P12_BASE64   base64 of your "Developer ID Application" certificate (.p12)
 #     DEVELOPER_ID_P12_PASSWORD password of that .p12
 #     APPLE_TEAM_ID             e.g. LBKJHBH5UN
 #     APPLE_ID                  your Apple ID email
 #     APPLE_APP_PASSWORD        app-specific password from appleid.apple.com
+#
+#   B) Your team's "Apple Development" certificate (free account is fine) — the widget gets its data
+#      (the App Group needs a team signature), but others still use right-click ▸ Open the first time:
+#     SIGNING_P12_BASE64        base64 of your "Apple Development" certificate (.p12)
+#     SIGNING_P12_PASSWORD      password of that .p12
+#     APPLE_TEAM_ID             e.g. LBKJHBH5UN
+#
+#   C) No secrets: ad-hoc ("unsigned"). The widget can't read the app's data on recent macOS.
+#
 
 on:
   push:
@@ -28,7 +37,8 @@ jobs:
   release:
     runs-on: macos-26
     env:
-      HAS_SIGNING: ${{ secrets.DEVELOPER_ID_P12_BASE64 != '' }}
+      # devid | team | none
+      SIGN_MODE: ${{ secrets.DEVELOPER_ID_P12_BASE64 != '' && 'devid' || (secrets.SIGNING_P12_BASE64 != '' && 'team' || 'none') }}
     steps:
       - uses: actions/checkout@v4
 
@@ -46,11 +56,11 @@ jobs:
           echo "TAG=v$V" >> "$GITHUB_ENV"
           echo "BUILD=${{ github.run_number }}" >> "$GITHUB_ENV"
 
-      - name: Import Developer ID certificate
-        if: env.HAS_SIGNING == 'true'
+      - name: Import signing certificate
+        if: env.SIGN_MODE != 'none'
         env:
-          P12: ${{ secrets.DEVELOPER_ID_P12_BASE64 }}
-          P12_PASSWORD: ${{ secrets.DEVELOPER_ID_P12_PASSWORD }}
+          P12: ${{ secrets.DEVELOPER_ID_P12_BASE64 || secrets.SIGNING_P12_BASE64 }}
+          P12_PASSWORD: ${{ secrets.DEVELOPER_ID_P12_PASSWORD || secrets.SIGNING_P12_PASSWORD }}
         run: |
           KEYCHAIN="$RUNNER_TEMP/signing.keychain-db"
           security create-keychain -p ci "$KEYCHAIN"
@@ -63,9 +73,13 @@ jobs:
 
       - name: Build
         run: |
-          if [ "$HAS_SIGNING" = "true" ]; then
+          echo "Signing mode: $SIGN_MODE"
+          if [ "$SIGN_MODE" = "devid" ]; then
             SIGN=(CODE_SIGN_STYLE=Manual "CODE_SIGN_IDENTITY=Developer ID Application"
                   DEVELOPMENT_TEAM="${{ secrets.APPLE_TEAM_ID }}" OTHER_CODE_SIGN_FLAGS=--timestamp)
+          elif [ "$SIGN_MODE" = "team" ]; then
+            SIGN=(CODE_SIGN_STYLE=Manual "CODE_SIGN_IDENTITY=Apple Development"
+                  DEVELOPMENT_TEAM="${{ secrets.APPLE_TEAM_ID }}" PROVISIONING_PROFILE_SPECIFIER=)
           else
             SIGN=(CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY=- DEVELOPMENT_TEAM= CODE_SIGNING_REQUIRED=YES)
           fi
@@ -82,7 +96,7 @@ jobs:
           echo "DMG=$DMG" >> "$GITHUB_ENV"
 
       - name: Sign & notarize DMG
-        if: env.HAS_SIGNING == 'true'
+        if: env.SIGN_MODE == 'devid'
         run: |
           codesign --sign "Developer ID Application" --timestamp "$DMG"
           xcrun notarytool submit "$DMG" --wait \
@@ -93,8 +107,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if [ "$HAS_SIGNING" = "true" ]; then
+          if [ "$SIGN_MODE" = "devid" ]; then
             NOTE="Signed and notarized. Open the DMG and drag **AI Limits** to Applications."
+          elif [ "$SIGN_MODE" = "team" ]; then
+            NOTE=$'Open the DMG, drag **AI Limits** to Applications, then **right-click ▸ Open** the first time (the app is signed but not notarized).\n\nIf macOS says the app is damaged, run: `xattr -dr com.apple.quarantine "/Applications/AI Limits.app"`'
           else
             NOTE=$'Unsigned build. Open the DMG, drag **AI Limits** to Applications, then **right-click ▸ Open** the first time (macOS blocks unsigned apps on double-click).\n\nIf macOS says the app is damaged, run: `xattr -dr com.apple.quarantine "/Applications/AI Limits.app"`'
           fi

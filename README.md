@@ -108,7 +108,7 @@ git push origin v1.0.0
 
 A few minutes later, `AI-Limits-1.0.0.dmg` shows up under **Releases**. You can also run it by hand from **Actions › Release › Run workflow**.
 
-Without an Apple Developer ID the build is unsigned. To ship signed and notarized builds, add these repository secrets: `DEVELOPER_ID_P12_BASE64`, `DEVELOPER_ID_P12_PASSWORD`, `APPLE_TEAM_ID`, `APPLE_ID` and `APPLE_APP_PASSWORD`. The workflow uses them automatically.
+Signing is set by repository secrets, listed at the top of the workflow file. The workflow uses **Developer ID** (signed and notarized) if those secrets are set. Otherwise it uses your team's **Apple Development** certificate, which works with a free account and is enough for the widgets to get their data. With no secrets the build is unsigned, and on recent macOS its widgets can't read the app's data.
 
 ## Privacy
 
