@@ -67,7 +67,36 @@ struct SettingsView: View {
                     Button("Check Now") { Task { await updater.check(userInitiated: true) } }
                         .disabled(updater.status == .checking || updater.status == .downloading || updater.status == .installing)
                     Spacer()
-                    Text(updateStatusText).font(.caption).foregroundStyle(.secondary)
+                    UpdateStatusLabel(status: updater.status)
+                }
+                if case .available(let version) = updater.status, let release = updater.latest {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("AI Limits \(version) is available — you have \(updater.currentVersion).")
+                            .font(.callout.weight(.medium))
+                        let notes = release.notes.trimmingCharacters(in: .whitespacesAndNewlines)
+                        if !notes.isEmpty {
+                            Text(verbatim: String(notes.prefix(400)) + (notes.count > 400 ? "…" : ""))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        HStack {
+                            Button("Install Update") { Task { await updater.install(release) } }
+                                .buttonStyle(.borderedProminent)
+                            Button("Skip This Version") { updater.skipLatest() }
+                            Spacer()
+                            Button("Release page") { NSWorkspace.shared.open(release.pageURL) }
+                                .buttonStyle(.link)
+                        }
+                    }
+                    .padding(.vertical, 4)
+                }
+                if case .failed = updater.status, let release = updater.latest {
+                    HStack {
+                        Spacer()
+                        Button("Release page") { NSWorkspace.shared.open(release.pageURL) }
+                            .buttonStyle(.link)
+                    }
                 }
                 Hint("Checks github.com/\(UpdateChecker.repository) releases. Installing replaces this copy and relaunches it.")
             }
@@ -150,18 +179,6 @@ struct SettingsView: View {
         await service.refresh()
     }
 
-    private var updateStatusText: String {
-        switch updater.status {
-        case .idle: ""
-        case .checking: "Checking…"
-        case .upToDate: "Up to date"
-        case .available(let v): "Version \(v) available"
-        case .downloading: "Downloading…"
-        case .installing: "Installing…"
-        case .failed(let message): message
-        }
-    }
-
     // MARK: - Pieces
 
     @ViewBuilder
@@ -186,6 +203,40 @@ struct SettingsView: View {
                 Text(kind.displayName)
             }
         }
+    }
+}
+
+/// One line next to "Check Now" with the result of the last check.
+private struct UpdateStatusLabel: View {
+    let status: UpdateChecker.Status
+
+    var body: some View {
+        Group {
+            switch status {
+            case .idle:
+                EmptyView()
+            case .checking:
+                HStack(spacing: 6) { ProgressView().controlSize(.small); Text("Checking…") }
+                    .foregroundStyle(.secondary)
+            case .upToDate(let version):
+                Label("Up to date (\(version))", systemImage: "checkmark.circle.fill")
+                    .foregroundStyle(.green)
+            case .available(let version):
+                Label("Version \(version) available", systemImage: "arrow.down.circle.fill")
+                    .foregroundStyle(.tint)
+            case .downloading:
+                HStack(spacing: 6) { ProgressView().controlSize(.small); Text("Downloading…") }
+                    .foregroundStyle(.secondary)
+            case .installing:
+                HStack(spacing: 6) { ProgressView().controlSize(.small); Text("Installing — the app will restart…") }
+                    .foregroundStyle(.secondary)
+            case .failed(let message):
+                Label(message, systemImage: "exclamationmark.triangle.fill")
+                    .foregroundStyle(.orange)
+                    .multilineTextAlignment(.trailing)
+            }
+        }
+        .font(.caption)
     }
 }
 

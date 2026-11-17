@@ -68,7 +68,8 @@ final class UpdateChecker: ObservableObject {
         await check(userInitiated: false)
     }
 
-    /// `userInitiated` = the user clicked "Check for Updates…": always report the result.
+    /// `userInitiated` = the user clicked "Check Now". Results are shown in Settings ▸ Updates (and the
+    /// menu bar popover) — never in a separate window. Automatic checks stay quiet about skipped versions.
     func check(userInitiated: Bool) async {
         status = .checking
         do {
@@ -76,17 +77,23 @@ final class UpdateChecker: ObservableObject {
             latest = release
             guard Self.isNewer(release.version, than: currentVersion) else {
                 status = .upToDate(currentVersion)
-                if userInitiated { showUpToDate() }
                 return
             }
-            status = .available(release.version)
-            if userInitiated || settings.skippedVersion != release.version {
-                promptToInstall(release)
+            if !userInitiated && settings.skippedVersion == release.version {
+                status = .idle
+            } else {
+                status = .available(release.version)
             }
         } catch {
-            status = .failed(error.localizedDescription)
-            if userInitiated { showError("Couldn't check for updates", error.localizedDescription) }
+            status = userInitiated ? .failed("Couldn't check: \(error.localizedDescription)") : .idle
         }
+    }
+
+    /// "Skip This Version" in Settings: stop offering this release automatically.
+    func skipLatest() {
+        guard let latest else { return }
+        settings.skippedVersion = latest.version
+        status = .idle
     }
 
     private func fetchLatest() async throws -> Release {
@@ -127,46 +134,6 @@ final class UpdateChecker: ObservableObject {
             if x != y { return x > y }
         }
         return false
-    }
-
-    // MARK: Prompts
-
-    private func promptToInstall(_ release: Release) {
-        NSApp.activate(ignoringOtherApps: true)
-        let alert = NSAlert()
-        alert.messageText = "AI Limits \(release.version) is available"
-        var info = "You have version \(currentVersion)."
-        let notes = release.notes.trimmingCharacters(in: .whitespacesAndNewlines)
-        if !notes.isEmpty { info += "\n\n" + String(notes.prefix(600)) + (notes.count > 600 ? "…" : "") }
-        alert.informativeText = info
-        alert.addButton(withTitle: "Install Update")
-        alert.addButton(withTitle: "Later")
-        alert.addButton(withTitle: "Skip This Version")
-        switch alert.runModal() {
-        case .alertFirstButtonReturn:
-            Task { await install(release) }
-        case .alertThirdButtonReturn:
-            settings.skippedVersion = release.version
-        default:
-            break
-        }
-    }
-
-    private func showUpToDate() {
-        NSApp.activate(ignoringOtherApps: true)
-        let alert = NSAlert()
-        alert.messageText = "You're up to date"
-        alert.informativeText = "AI Limits \(currentVersion) is the latest version."
-        alert.runModal()
-    }
-
-    private func showError(_ title: String, _ detail: String) {
-        NSApp.activate(ignoringOtherApps: true)
-        let alert = NSAlert()
-        alert.alertStyle = .warning
-        alert.messageText = title
-        alert.informativeText = detail
-        alert.runModal()
     }
 
     // MARK: Installing
@@ -210,9 +177,7 @@ final class UpdateChecker: ObservableObject {
 
             try relaunch(replacing: appURL, with: staged)
         } catch {
-            status = .failed(error.localizedDescription)
-            showError("Update failed", "\(error.localizedDescription)\n\nYou can download it from the release page instead.")
-            NSWorkspace.shared.open(release.pageURL)
+            status = .failed("Update failed: \(error.localizedDescription). Use “Release page” to download it.")
         }
     }
 

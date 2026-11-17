@@ -31,7 +31,11 @@ struct AILimitsApp: App {
         .menuBarExtraStyle(.window)
         .commands {
             CommandGroup(after: .appInfo) {
-                Button("Check for Updates…") { Task { await AppModel.shared.updater.check(userInitiated: true) } }
+                Button("Check for Updates…") {
+                    // The result appears in Settings ▸ Updates, not in a separate window.
+                    SettingsWindowController.shared.show()
+                    Task { await AppModel.shared.updater.check(userInitiated: true) }
+                }
             }
             CommandGroup(replacing: .appSettings) {
                 Button("Settings…") { SettingsWindowController.shared.show() }
@@ -128,12 +132,19 @@ final class SettingsWindowController {
             window.isReleasedWhenClosed = false
             window.setFrameAutosaveName("AILimitsSettings")
             if !window.setFrameUsingName("AILimitsSettings") { window.center() }
+            // A normal desktop window: never joins full-screen spaces or every Space, never goes full
+            // screen itself. Opening it while a full-screen app is in front switches to a desktop instead.
+            window.collectionBehavior = [.managed, .participatesInCycle, .fullScreenNone, .fullScreenDisallowsTiling]
             self.window = window
         }
         // The Dock icon is shown only while Settings is open (unless "Keep icon in Dock" is on).
+        // Become a regular app first: windows of menu-bar-only (accessory) apps float over full-screen
+        // apps, regular apps' windows don't. Show the window on the next turn, once the change applied.
         NSApp.setActivationPolicy(.regular)
-        NSApp.activate(ignoringOtherApps: true)
-        window?.makeKeyAndOrderFront(nil)
+        DispatchQueue.main.async { [weak self] in
+            NSApp.activate(ignoringOtherApps: true)
+            self?.window?.makeKeyAndOrderFront(nil)
+        }
     }
 
     private var closeObserver: NSObjectProtocol?
