@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.0.12
+- Fixed desktop widgets staying grey after an update: the old widget process kept running and macOS rejected what it drew ("Bundle version did not match"). The app now restarts the widget process when it launches and after installing an update.
+
 ## 0.0.11
 - Fixed desktop widgets staying grey (placeholder) in release builds: the widget now gets its data straight from the running app over 127.0.0.1, and never waits more than a few seconds on the shared file.
 

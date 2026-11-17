@@ -1,104 +1,298 @@
-== widget registrations
-+    com.robertlevonyan.ailimits.widgets(0.0.9)
+== versions
+0.0.11
+0.0.11
+== signing app
+Identifier=com.robertlevonyan.ailimits
+Authority=Apple Development: robertlevonyan91@gmail.com (6W8EVU9X9V)
+Authority=Apple Worldwide Developer Relations Certification Authority
+Authority=Apple Root CA
+TeamIdentifier=LBKJHBH5UN
+== signing widget
+Identifier=com.robertlevonyan.ailimits.widgets
+Authority=Apple Development: robertlevonyan91@gmail.com (6W8EVU9X9V)
+Authority=Apple Worldwide Developer Relations Certification Authority
+Authority=Apple Root CA
+TeamIdentifier=LBKJHBH5UN
+{
+  "com.apple.security.app-sandbox" => true
+  "com.apple.security.application-groups" => [
+    0 => "LBKJHBH5UN.com.robertlevonyan.ailimits"
+  ]
+  "com.apple.security.network.client" => true
+}
+== verify
+--validated:/Applications/AI Limits.app/Contents/PlugIns/AILimitsWidget.appex
+/Applications/AI Limits.app: valid on disk
+/Applications/AI Limits.app: satisfies its Designated Requirement
+/Applications/AI Limits.app: accepted
+override=security disabled
+origin=Apple Development: robertlevonyan91@gmail.com (6W8EVU9X9V)
+== registrations
+	        Platform = macOS
+
++    com.robertlevonyan.ailimits.widgets(0.0.11)
 	            Path = /Applications/AI Limits.app/Contents/PlugIns/AILimitsWidget.appex
-	            UUID = 5FFC9181-3E35-4633-83C5-EC13FD5A5E26
-	       Timestamp = 2026-11-16 10:42:36 +0000
+	            UUID = 3BE65558-0FC8-4908-87DD-46BFE5E59F71
+	       Timestamp = 2026-11-16 11:18:38 +0000
 	             SDK = com.apple.widgetkit-extension
 	   Parent Bundle = /Applications/AI Limits.app
 	    Display Name = AI Limits
 	      Short Name = AI Limits
 	     Parent Name = AI Limits
 	        Platform = macOS
-
- (1 plug-in)
 == running
 32744 /Applications/AI Limits.app/Contents/PlugIns/AILimitsWidget.appex/Contents/MacOS/AILimitsWidget -BSServiceDomains {"XPCService":{"Services":{"MainService":{}}}} -LaunchArguments eyJ0eXBlIjoxLCJzZXJ2aWNlTmFtZSI6ImNvbS5yb2JlcnRsZXZvbnlhbi5haWxpbWl0cy53aWRnZXRzIiwiZW5oYW5jZWRTZWN1cml0eSI6ZmFsc2V9
-57046 /Applications/AI Limits.app/Contents/MacOS/AI Limits
-== shared store
-total 16
-drwx------@   5 robert  staff   160 Nov 16 14:43 .
-drwx------  159 robert  staff  5088 Nov 16 11:13 ..
--rw-------    1 robert  staff   683 Oct 22 15:40 .com.apple.containermanagerd.metadata.plist
-drwx------    6 robert  staff   192 Oct 22 15:40 Library
--rw-r--r--@   1 robert  staff   873 Nov 16 14:43 usage.json
-== widget log (15 min)
-        BackgroundState = 3;
-        BundleID = "com.openai.codex";
-        Hide = 0;
-        Path = "/Applications/ChatGPT.app";
-    },
-        {
-        BackgroundState = 3;
-        BundleID = "ru.keepcoder.telegram";
-        Hide = 0;
-        Path = "/Applications/Telegram.app";
-    },
-        {
-        BackgroundState = 3;
-        BundleID = "com.github.githubclient";
-        Hide = 0;
-        Path = "/Applications/GitHub Desktop.app";
-    },
-        {
-        BackgroundState = 3;
-        BundleID = "com.google.antigravity";
-        Hide = 0;
-        Path = "/Applications/Antigravity.app";
-    },
-        {
-        BackgroundState = 2;
-        BundleID = "com.apple.ical";
-        Hide = 0;
-        Path = "/System/Applications/Calendar.app";
-    },
-        {
-        BackgroundState = 2;
-        BundleID = "de.janbolz.silicio";
-        Hide = 0;
-        Path = "/Applications/Silicio.app";
-    },
-        {
-        BackgroundState = 2;
-        BundleID = "com.apple.activitymonitor";
-        Hide = 0;
-        Path = "/System/Applications/Utilities/Activity Monitor.app";
-    },
-        {
-        BackgroundState = 3;
-        BundleID = "com.viber.osx";
-        Hide = 0;
-        Path = "/Applications/Viber.app";
-    },
-        {
-        BackgroundState = 3;
-        BundleID = "com.monday.desktop";
-        Hide = 0;
-        Path = "/Applications/monday.com.app";
-    },
-        {
-        BackgroundState = 3;
-        BundleID = "com.google.geminimacos";
-        Hide = 0;
-        Path = "/Applications/Gemini.app";
-    },
-        {
-        BackgroundState = 3;
-        BundleID = "org.videolan.vlc";
-        Hide = 0;
-        Path = "/Applications/VLC.app";
-    },
-        {
-        BackgroundState = 3;
-        BundleID = "com.electron.realtimeboard";
-        Hide = 0;
-        Path = "/Applications/Miro.app";
-    },
-        {
-        BackgroundState = 3;
-        BundleID = "com.spotify.client";
-        Hide = 0;
-        Path = "/Applications/Spotify.app";
-    }
-)
-2026-11-16 14:43:43.069 E  SecurityPrivacyExtension[57453:1536c8] [com.apple.Settings:framework] /AppleInternal/Library/BuildRoots/4~CaROugC4yByUJNTX3DYXvO0ULBtK-YpL_JMD2GI/Library/Caches/com.apple.xbs/TemporaryDirectory.TVSin1/Sources/SecurityPref/Extension/Privacy/TCC+PrivacyServicesProvider.swift:209 loadAuthorizationStates(for:) new entry: kTCCServiceSystemPolicyAppDataDetailed com.robertlevonyan.ailimits none
-2026-11-16 14:43:43.069 E  SecurityPrivacyExtension[57453:1536c8] [com.apple.Settings:framework] /AppleInternal/Library/BuildRoots/4~CaROugC4yByUJNTX3DYXvO0ULBtK-YpL_JMD2GI/Library/Caches/com.apple.xbs/TemporaryDirectory.TVSin1/Sources/SecurityPref/Extension/Privacy/TCC+PrivacyServicesProvider.swift:209 loadAuthorizationStates(for:) new entry: kTCCServiceSystemPolicyAppDataDetailed com.robertlevonyan.ailimits none
+61659 /Applications/AI Limits.app/Contents/MacOS/AI Limits
+== local feed
+{"showsUsed":false,"providers":[{"plan":"Team","windows":[{"isHeadline":true,"label":"5-hour","resetsAt":816607199,"usedFraction":0.02},{"isHeadline":false,"blocks":true,"label":"Weekly","resetsAt":816933599,"usedFraction":0.06},{"isHeadline":false,"blocks":false,"label":"Extra usage","usedFraction" (exit 0)
+== log 10 min
+2026-11-17 11:03:31.699 Df chronod[32728:23a040] [com.apple.chrono:keepalive] Removed: <Task 70EB7E5E-630C-488C-8D76-FBAB5BB63EAC: timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>>
+2026-11-17 11:03:31.699 Df chronod[32728:23a03f] [com.apple.chrono:session] [ailimits.widgets-6BD7FB01194C] Session operation: `getTimelines(1)` finished.
+2026-11-17 11:03:31.699 Df chronod[32728:23a040] [com.apple.chrono:tasksession] [81ABD644]: _taskQueue_evaluate() with task timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.81ABD644
+2026-11-17 11:03:31.699 Df chronod[32728:23a040] [com.apple.chrono:tasksession] [81ABD644]: _taskQueue_teardown() with task timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.81ABD644
+2026-11-17 11:03:31.699 Df chronod[32728:23a040] [com.apple.chrono:tasksession] [81ABD644]: _taskQueue_complete() with task timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.81ABD644
+2026-11-17 11:03:31.699 Df chronod[32728:23a03f] [com.apple.chrono:session] Connection to extension process was invalidated: com.robertlevonyan.ailimits.widgets
+2026-11-17 11:03:31.699 Df chronod[32728:23a03f] [com.apple.chrono:session] [ailimits.widgets-6BD7FB01194C] Session deinit
+2026-11-17 11:03:31.699 Df chronod[32728:23a4ba] [com.apple.chrono:timeline.store] Task [22801] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Completed
+2026-11-17 11:03:31.699 Df chronod[32728:23a4ba] [com.apple.chrono:timeline.store] record reload: [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] = externalRequest([source:<BSProcessHandle: 0x786274f450; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false
+2026-11-17 11:03:31.699 Df chronod[32728:23a4ba] [com.apple.chrono:timeline.store] Task [22801] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Reload failure
+2026-11-17 11:03:31.699 E  chronod[32728:23a4ba] [com.apple.chrono:timeline.store] Task [22801] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Reload failed; 0 retries remaining: CHSErrorDomain (1050) Error Domain=CHSErrorDomain Code=1050 "timelineReloadFailed" UserInfo={NSDebugDescription=timelineReloadFailed}
+2026-11-17 11:03:31.699 Df chronod[32728:23a4ba] [com.apple.chrono:timeline.store] Task [22801] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] New state: reload
+2026-11-17 11:03:31.699 Df chronod[32728:23a4ba] [com.apple.chrono:timeline.store] Task [22801] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Follow-on reload from completion needed: [[externalRequest([source:<BSProcessHandle: 0x786274f450; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false-immediate-budgeted-0]]
+2026-11-17 11:03:31.699 Df chronod[32728:23a4ba] [com.apple.chrono:timeline.store] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Reload with configuration [externalRequest([source:<BSProcessHandle: 0x786274f450; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false-immediate-budgeted-0]
+2026-11-17 11:03:31.699 Df chronod[32728:23a4ba] [com.apple.chrono:timeline.store] Task [22802] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Preparing reload
+2026-11-17 11:03:31.699 Df chronod[32728:23a4ba] [com.apple.chrono:timeline.store] Task [22802] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Dispatching new task
+2026-11-17 11:03:31.699 Df chronod[32728:23a4ba] [com.apple.chrono:timeline.store] Task [22802] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Scheduling reload with configuration: [externalRequest([source:<BSProcessHandle: 0x786274f450; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false-immediate-budgeted-0]
+2026-11-17 11:03:31.699 Df chronod[32728:23a4ba] [com.apple.chrono:timeline.store] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Not checking cache (externalRequest([source:<BSProcessHandle: 0x786274f450; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false)
+2026-11-17 11:03:31.699 Df chronod[32728:23a4ba] [com.apple.chrono:timeline.store] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] scheduled [externalRequest([source:<BSProcessHandle: 0x786274f450; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false-immediate-budgeted-0]
+2026-11-17 11:03:31.699 Df chronod[32728:23a4ba] [com.apple.chrono:taskservice] [B1DAD84D]: task submitted timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.B1DAD84D
+2026-11-17 11:03:31.699 Df chronod[32728:23a4ba] [com.apple.chrono:timeline.store] Task [22802] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Scheduled with cancellable token: [<TaskService.TaskCancellable: TaskID: B1DAD84D>]
+2026-11-17 11:03:31.699 Df chronod[32728:23a03f] [com.apple.chrono:taskservice] Add pending task: timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.B1DAD84D
+2026-11-17 11:03:31.699 Df chronod[32728:23a03f] [com.apple.chrono:taskservice] Popped next task of 1: timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.B1DAD84D from foregroundUserInteractive
+2026-11-17 11:03:31.699 Df chronod[32728:23a03f] [com.apple.chrono:taskservice] Remove pending task: timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.B1DAD84D
+2026-11-17 11:03:31.699 Df chronod[32728:23a03f] [com.apple.chrono:taskservice] [B1DAD84D]: starting pended task timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.B1DAD84D; pendingTasks.count = 0
+2026-11-17 11:03:31.699 Df chronod[32728:23a4ba] [com.apple.chrono:tasksession] [B1DAD84D]: start() with task timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.B1DAD84D
+2026-11-17 11:03:31.699 Df chronod[32728:23a4ba] [com.apple.chrono:tasksession] [B1DAD84D]: _taskQueue_setup() with task timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.B1DAD84D
+2026-11-17 11:03:31.699 Df chronod[32728:23a4ba] [com.apple.chrono:session] Overriding assertion attributes in sync launch case: com.robertlevonyan.ailimits.widgets
+2026-11-17 11:03:31.700 Df chronod[32728:23a4ba] [com.apple.extensionkit:launch] Launching process with config: identity: RecordIdentity(record: ExtensionFoundation.Database._ExtensionRecord(lsRecord: <LSApplicationExtensionRecord 0x7861b6c5a0> { bundleID: com.robertlevonyan.ailimits.widgets, URL: file:///Applications/AI%20Limits.app/Contents/PlugIns/AILimitsWidget.appex/, super: <LSApplicationExtensionRecord 0x7861b6c5a0> { table: 24, unit: c58, attached: yes } })) instance: _InstanceIdentifier(_id: Optional(65D1CB5C-F603-4CCB-818C-FB6CC7892408))
+2026-11-17 11:03:31.704 Df chronod[32728:23a4ba] [com.apple.chrono:session] [com.robertlevonyan.ailimits.widgets-279CD035-9CA3-4990-A85D-F85D43ECB451] Created a new WidgetExtensionSession at user interactive priority.
+2026-11-17 11:03:31.704 Df chronod[32728:23a4ba] [com.apple.chrono:session] [ailimits.widgets-F85D43ECB451] acquired WidgetExtensionRun-QOS-UserInitiated
+2026-11-17 11:03:31.704 Df chronod[32728:23a4ba] [com.apple.chrono:session] [ailimits.widgets-F85D43ECB451] Session initialized
+2026-11-17 11:03:31.704 Df chronod[32728:23a4ba] [com.apple.chrono:keepalive] Added: <Task CA6DA6F5-2B2F-4018-85D7-F742A33982E8: timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>>
+2026-11-17 11:03:31.704 Df chronod[32728:23a4ba] [com.apple.chrono:tasksession] [B1DAD84D]: _taskQueue_execute() with task timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.B1DAD84D
+2026-11-17 11:03:31.704 Df chronod[32728:23a4ba] [com.apple.chrono:timeline.store] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] reload: begin
+2026-11-17 11:03:31.704 Df chronod[32728:23a4ba] [com.apple.chrono:keepalive] Added: Reload timeline: com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets
+2026-11-17 11:03:31.704 E  NotificationCenter[1233:239a26] [com.apple.chrono:timeline] Content load failed: unable to find or unarchive file for key: [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)] on local. The session may still produce one shortly. Error: Using url `file:///Users/robert/Library/Containers/com.robertlevonyan.ailimits.widgets/Data/SystemData/com.apple.chrono/timelines/AILimitsClaude/systemSmall164.00w-164.00h-27.88r-kwXjBcg0jLGkOXgfIR%23vfsEQ3NEuHIIxpQplS%23DfabA=.chrono-timeline` ... Error Domain=NSCocoaErrorDomain Code=4 "The file “systemSmall164.00w-164.00h-27.88r-kwXjBcg0jLGkOXgfIR#vfsEQ3NEuHIIxpQplS#DfabA=.chrono-timeline” doesn’t exist." UserInfo={NSFilePath=/Users/robert/Library/Containers/com.robertlevonyan.ailimits.widgets/Data/SystemData/com.apple.chrono/timelines/AILimitsClaude/systemSmall164.00w-164.00h-27.88r-kwXjBcg0jLGkOXgfIR#vfsEQ3NEuHIIxpQplS#DfabA=.chrono-timeline, NSUnderlyingError=0x7bb8637390 {Error Domain=NSPOSIXErrorDomain Code=2 "No such file or directory"}}
+2026-11-17 11:03:31.704 Df NotificationCenter[1233:2b88] [com.apple.chrono:visibility] [Timeline[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)]--WidgetInstance::nil::0x0000007bb9ee5e00)] Content reload detected - evaluating staleness.
+2026-11-17 11:03:31.704 Df NotificationCenter[1233:2b88] [com.apple.chrono:visibility] [Timeline[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)]--WidgetInstance::nil::0x0000007bb9ee5200)] Content reload detected - evaluating staleness.
+2026-11-17 11:03:31.704 Df NotificationCenter[1233:2b88] [com.apple.chrono:visibility] [Timeline[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)]--WidgetInstance::nil::0x0000007bb9ee5200)] Ignoring staleness check - not visibly settled for current view session yet.
+2026-11-17 11:03:31.705 Df chronod[32728:23a4ba] [com.apple.chrono:session] [ailimits.widgets-F85D43ECB451] Session operation: `getTimelines(1)` request.
+2026-11-17 11:03:31.705 Df chronod[32728:23a4ba] [com.apple.chrono:session] [ailimits.widgets-F85D43ECB451] Session operation: `getTimelines(1)` executing.
+2026-11-17 11:03:31.706 Df AILimitsWidget[32744:2372a2] [com.apple.chrono:timeline] Batch begin (ti-f2f5ce) - locale: en_US (fixed en_US)
+2026-11-17 11:03:31.706 Df AILimitsWidget[32744:2372a2] [com.apple.chrono:timeline] intent = nil
+2026-11-17 11:03:31.706 Df AILimitsWidget[32744:2372a2] [com.apple.chrono:timeline] Request began for AILimitsClaude:systemSmall:(noIntent) - to archive: /private/var/folders/r4/mc4ljfb15_qdgbl1hvqyzmdr0000gn/T/com.apple.chrono/TemporaryItems/NSIRD_chronod_egttPC/systemSmall164.00w-164.00h-27.88r-kwXjBcg0jLGkOXgfIR#vfsEQ3NEuHIIxpQplS#DfabA=.chrono-timeline
+2026-11-17 11:03:31.706 A  AILimitsWidget[32744:eda34] (libsystem_containermanager.dylib) container_create_or_lookup_app_group_path_by_app_group_identifier
+2026-11-17 11:03:31.706 Df AILimitsWidget[32744:eda34] [com.apple.containermanager:unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: success
+2026-11-17 11:03:31.706 Df AILimitsWidget[32744:eda34] [com.apple.chrono:widget] Archive deployment version: DeploymentVersion(base: SwiftUI.ArchivedViewInput.DeploymentVersion(rawValue: 5))
+2026-11-17 11:03:31.707 Df AILimitsWidget[32744:eda34] [com.apple.chrono:widget] Supports content layers? true, archiveVersion=2720
+2026-11-17 11:03:31.708 Df AILimitsWidget[32744:eda34] [com.apple.chrono:archiving] Filtered image [1: 256-256]: exit (no size constraints configured)
+2026-11-17 11:03:31.711 Df AILimitsWidget[32744:eda34] [com.apple.chrono:widget] Supports content layers? true, archiveVersion=2720
+2026-11-17 11:03:31.713 Df AILimitsWidget[32744:eda34] [com.apple.chrono:widget] Supports content layers? true, archiveVersion=2720
+2026-11-17 11:03:31.714 Df AILimitsWidget[32744:eda34] [com.apple.chrono:widget] Supports content layers? true, archiveVersion=2720
+2026-11-17 11:03:31.716 Df AILimitsWidget[32744:eda34] [com.apple.chrono:widget] Supports content layers? true, archiveVersion=2720
+2026-11-17 11:03:31.718 Df AILimitsWidget[32744:eda34] [com.apple.chrono:widget] Supports content layers? true, archiveVersion=2720
+2026-11-17 11:03:31.720 Df AILimitsWidget[32744:eda34] [com.apple.chrono:widget] Supports content layers? true, archiveVersion=2720
+2026-11-17 11:03:31.721 Df AILimitsWidget[32744:eda34] [com.apple.chrono:timeline] Request ended for AILimitsClaude:systemSmall:(noIntent) - success
+2026-11-17 11:03:31.721 Df AILimitsWidget[32744:eda34] [com.apple.chrono:timeline] Batch end (ti-f2f5ce) - success
+2026-11-17 11:03:31.721 Df chronod[32728:23a03f] [com.apple.chrono:session] [ailimits.widgets-F85D43ECB451] Session operation: `getTimelines(1)` result.
+2026-11-17 11:03:31.721 Df chronod[32728:23a03f] [com.apple.chrono:archiving] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)] on local-file:///Users/robert/Library/Containers/com.robertlevonyan.ailimits.widgets/Data/SystemData/com.apple.chrono/timelines/AILimitsClaude/systemSmall164.00w-164.00h-27.88r-kwXjBcg0jLGkOXgfIR%23vfsEQ3NEuHIIxpQplS%23DfabA=.chrono-timeline destroying promise for 'Accept failed.' - </var/folders/r4/mc4ljfb15_qdgbl1hvqyzmdr0000gn/T/com.apple.chrono//TemporaryItems/NSIRD_chronod_egttPC/systemSmall164.00w-164.00h-27.88r-kwXjBcg0jLGkOXgfIR#vfsEQ3NEuHIIxpQplS#DfabA=.chrono-timeline>
+2026-11-17 11:03:31.722 E  chronod[32728:23a03f] [com.apple.chrono:timeline.store] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)] on local reload: failed with error WidgetKit.WidgetArchiver.ValidationError.bundleStubNotSupported(underlyingError: WidgetKit.WidgetArchiver.(unknown context at $1b298e604).SimpleError.message("Bundle version did not match; LaunchServices DB may need to be rebuilt")))
+2026-11-17 11:03:31.722 Df chronod[32728:23a03f] [com.apple.chrono:timeline.store] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] reload: failed
+2026-11-17 11:03:31.722 Df chronod[32728:23a03f] [com.apple.chrono:session] [ailimits.widgets-F85D43ECB451] acquired WaitForWidgetSuspension
+2026-11-17 11:03:31.722 Df chronod[32728:23a03f] [com.apple.chrono:session] [ailimits.widgets-F85D43ECB451] WidgetExtensionAssertion invalidated
+2026-11-17 11:03:31.722 Df chronod[32728:23a03f] [com.apple.chrono:session] [ailimits.widgets-F85D43ECB451] Session invalidated
+2026-11-17 11:03:31.722 Df chronod[32728:23a03f] [com.apple.chrono:keepalive] Removed: Reload timeline: com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets
+2026-11-17 11:03:31.722 Df chronod[32728:23a4c0] [com.apple.chrono:keepalive] Removed: <Task CA6DA6F5-2B2F-4018-85D7-F742A33982E8: timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>>
+2026-11-17 11:03:31.722 Df chronod[32728:23a03f] [com.apple.chrono:session] [ailimits.widgets-F85D43ECB451] Session operation: `getTimelines(1)` finished.
+2026-11-17 11:03:31.722 Df chronod[32728:23a4c0] [com.apple.chrono:tasksession] [B1DAD84D]: _taskQueue_evaluate() with task timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.B1DAD84D
+2026-11-17 11:03:31.722 Df chronod[32728:23a4c0] [com.apple.chrono:tasksession] [B1DAD84D]: _taskQueue_teardown() with task timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.B1DAD84D
+2026-11-17 11:03:31.722 Df chronod[32728:23a4c0] [com.apple.chrono:tasksession] [B1DAD84D]: _taskQueue_complete() with task timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.B1DAD84D
+2026-11-17 11:03:31.722 Df chronod[32728:23a03f] [com.apple.chrono:session] Connection to extension process was invalidated: com.robertlevonyan.ailimits.widgets
+2026-11-17 11:03:31.722 Df chronod[32728:23a4b9] [com.apple.chrono:timeline.store] Task [22802] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Completed
+2026-11-17 11:03:31.722 Df chronod[32728:23a040] [com.apple.chrono:session] [ailimits.widgets-F85D43ECB451] Session deinit
+2026-11-17 11:03:31.722 Df chronod[32728:23a4b9] [com.apple.chrono:timeline.store] record reload: [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] = externalRequest([source:<BSProcessHandle: 0x786274f450; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false
+2026-11-17 11:03:31.722 Df chronod[32728:23a4b9] [com.apple.chrono:timeline.store] Task [22802] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Reload failure
+2026-11-17 11:03:31.723 E  chronod[32728:23a4b9] [com.apple.chrono:timeline.store] Task [22802] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Reload failed; next attempt due at 2026-11-17T12:03:31+04:00: CHSErrorDomain (1050) Error Domain=CHSErrorDomain Code=1050 "timelineReloadFailed" UserInfo={NSDebugDescription=timelineReloadFailed}
+2026-11-17 11:03:31.723 Df chronod[32728:23a4b9] [com.apple.chrono:timeline.store] Task [22802] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] New state: failed
+2026-11-17 11:03:31.723 Df chronod[32728:23a4b9] [com.apple.chrono:timeline.store] Task [22802] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Follow-on reload from completion needed: [[scheduledRetry(externalRequest([source:<BSProcessHandle: 0x786274f450; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false)-2026-11-17T12:03:31+04:00-budgeted-1]]
+2026-11-17 11:03:31.723 Df chronod[32728:23a4b9] [com.apple.chrono:timeline.store] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Reload with configuration [scheduledRetry(externalRequest([source:<BSProcessHandle: 0x786274f450; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false)-2026-11-17T12:03:31+04:00-budgeted-1]
+2026-11-17 11:03:31.723 Df chronod[32728:23a4b9] [com.apple.chrono:timeline.store] Task [22803] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Preparing reload
+2026-11-17 11:03:31.723 Df chronod[32728:23a4b9] [com.apple.chrono:timeline.store] Task [22803] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Dispatching new task
+2026-11-17 11:03:31.723 Df chronod[32728:23a4b9] [com.apple.chrono:timeline.store] Task [22803] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Scheduling reload with configuration: [scheduledRetry(externalRequest([source:<BSProcessHandle: 0x786274f450; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false)-2026-11-17T12:03:31+04:00-budgeted-1]
+2026-11-17 11:03:31.723 Df chronod[32728:23a4b9] [com.apple.chrono:timeline.store] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Not checking cache (scheduledRetry(externalRequest([source:<BSProcessHandle: 0x786274f450; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false))
+2026-11-17 11:03:31.723 Df chronod[32728:23a4b9] [com.apple.chrono:timeline.store] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] scheduled [scheduledRetry(externalRequest([source:<BSProcessHandle: 0x786274f450; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false)-2026-11-17T12:03:31+04:00-budgeted-1]
+2026-11-17 11:03:31.723 Df chronod[32728:23a4b9] [com.apple.chrono:taskservice] [9813A5B0]: task submitted timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.9813A5B0
+2026-11-17 11:03:31.723 Df chronod[32728:23a4b9] [com.apple.chrono:timeline.store] Task [22803] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Scheduled with cancellable token: [<TaskService.TaskCancellable: TaskID: 9813A5B0>]
+2026-11-17 11:03:31.728 E  NotificationCenter[1233:239a26] [com.apple.chrono:timeline] Content load failed: unable to find or unarchive file for key: [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)] on local. The session may still produce one shortly. Error: Using url `file:///Users/robert/Library/Containers/com.robertlevonyan.ailimits.widgets/Data/SystemData/com.apple.chrono/timelines/AILimitsClaude/systemSmall164.00w-164.00h-27.88r-kwXjBcg0jLGkOXgfIR%23vfsEQ3NEuHIIxpQplS%23DfabA=.chrono-timeline` ... Error Domain=NSCocoaErrorDomain Code=4 "The file “systemSmall164.00w-164.00h-27.88r-kwXjBcg0jLGkOXgfIR#vfsEQ3NEuHIIxpQplS#DfabA=.chrono-timeline” doesn’t exist." UserInfo={NSFilePath=/Users/robert/Library/Containers/com.robertlevonyan.ailimits.widgets/Data/SystemData/com.apple.chrono/timelines/AILimitsClaude/systemSmall164.00w-164.00h-27.88r-kwXjBcg0jLGkOXgfIR#vfsEQ3NEuHIIxpQplS#DfabA=.chrono-timeline, NSUnderlyingError=0x7bb8636b80 {Error Domain=NSPOSIXErrorDomain Code=2 "No such file or directory"}}
+2026-11-17 11:03:31.728 Df NotificationCenter[1233:2b88] [com.apple.chrono:visibility] [Timeline[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)]--WidgetInstance::nil::0x0000007bb9ee5e00)] Content reload detected - evaluating staleness.
+2026-11-17 11:03:31.728 Df NotificationCenter[1233:2b88] [com.apple.chrono:visibility] [Timeline[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)]--WidgetInstance::nil::0x0000007bb9ee5200)] Content reload detected - evaluating staleness.
+2026-11-17 11:03:31.728 Df NotificationCenter[1233:2b88] [com.apple.chrono:visibility] [Timeline[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)]--WidgetInstance::nil::0x0000007bb9ee5200)] Ignoring staleness check - not visibly settled for current view session yet.
+2026-11-17 11:03:31.765 Df chronod[32728:23a4b9] [com.apple.runningboard:monitor] Received state update for 32744 (extension<com.robertlevonyan.ailimits.widgets[config:6E69CA09-34E3-3493-B8FC-B5021E1ACB71]((null):32728)(501)>[uuid:65D1CB5C-F603-4CCB-818C-FB6CC7892408], running-active-NotVisible
+2026-11-17 11:03:31.806 Df chronod[32728:23a4c0] [com.apple.runningboard:monitor] Received state update for 32744 (extension<com.robertlevonyan.ailimits.widgets[config:6E69CA09-34E3-3493-B8FC-B5021E1ACB71]((null):32728)(501)>[uuid:65D1CB5C-F603-4CCB-818C-FB6CC7892408], running-suspended-NotVisible
+2026-11-17 11:03:31.914 Df chronod[32728:23a4b9] [com.apple.runningboard:monitor] Received state update for 32744 (extension<com.robertlevonyan.ailimits.widgets[config:6E69CA09-34E3-3493-B8FC-B5021E1ACB71]((null):32728)(501)>[uuid:65D1CB5C-F603-4CCB-818C-FB6CC7892408], running-suspended-NotVisible
+2026-11-17 11:03:32.808 Df chronod[32728:23a4b9] [com.apple.runningboard:monitor] Received state update for 61659 (app<application.com.robertlevonyan.ailimits.41280401.41280406(501)>, running-active-NotVisible
+2026-11-17 11:03:33.752 Df chronod[32728:23a03f] [com.apple.chrono:reloadService] Setting last requested reload date for key: <_ReloadStateKey: extensionBundleIdentifier=com.robertlevonyan.ailimits.widgets, kind=all>: 11/17/2026, 11:03
+2026-11-17 11:03:33.752 E  chronod[32728:23a03f] [com.apple.chrono:archiving] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)] on local failed to set requiresReload attribute at `/Users/robert/Library/Containers/com.robertlevonyan.ailimits.widgets/Data/SystemData/com.apple.chrono/timelines/AILimitsClaude/systemSmall164.00w-164.00h-27.88r-kwXjBcg0jLGkOXgfIR#vfsEQ3NEuHIIxpQplS#DfabA=.chrono-timeline`: (extension in ChronoServices):Foundation.URL.ExtendedAttributeError.posixFailure(attributeName: "WidgetCacheManager_RequiresReload", returnCode: -1, underlyingError: Foundation.POSIXError(_nsError: Error Domain=NSPOSIXErrorDomain Code=2 "No such file or directory"))
+2026-11-17 11:03:33.753 Df chronod[32728:23a03f] [com.apple.chrono:timeline.store] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Reload with configuration [externalRequest([source:<BSProcessHandle: 0x786274ed60; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false-immediate-budgeted-1]
+2026-11-17 11:03:33.753 Df chronod[32728:23a03f] [com.apple.chrono:timeline.store] Task [22804] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Preparing reload
+2026-11-17 11:03:33.753 Df chronod[32728:23a03f] [com.apple.chrono:timeline.store] Task [22804] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Replacing all tasks
+2026-11-17 11:03:33.753 Df chronod[32728:23a03f] [com.apple.chrono:timeline.store] Task [22804] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Dispatching new task
+2026-11-17 11:03:33.753 Df chronod[32728:23a03f] [com.apple.chrono:taskservice] [9813A5B0]: cancelling timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.9813A5B0
+2026-11-17 11:03:33.753 Df chronod[32728:23a03f] [com.apple.chrono:timeline.store] Task [22804] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Scheduling reload with configuration: [externalRequest([source:<BSProcessHandle: 0x786274ed60; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false-immediate-budgeted-1]
+2026-11-17 11:03:33.753 Df chronod[32728:23a4c0] [com.apple.chrono:timeline.store] Task [22803] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Completed
+2026-11-17 11:03:33.754 Df chronod[32728:23a4c0] [com.apple.chrono:timeline.store] Task [22803] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Ignored as it was replaced by task [22804]
+2026-11-17 11:03:33.754 Df chronod[32728:23a4c0] [com.apple.chrono:timeline.store] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Not checking cache (externalRequest([source:<BSProcessHandle: 0x786274ed60; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false)
+2026-11-17 11:03:33.754 Df chronod[32728:23a4c0] [com.apple.chrono:timeline.store] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] scheduled [externalRequest([source:<BSProcessHandle: 0x786274ed60; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false-immediate-budgeted-1]
+2026-11-17 11:03:33.754 Df chronod[32728:23a4c0] [com.apple.chrono:taskservice] [C7247304]: task submitted timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.C7247304
+2026-11-17 11:03:33.754 Df chronod[32728:23a4c0] [com.apple.chrono:timeline.store] Task [22804] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Scheduled with cancellable token: [<TaskService.TaskCancellable: TaskID: C7247304>]
+2026-11-17 11:03:33.754 Df chronod[32728:23a03f] [com.apple.chrono:taskservice] Add pending task: timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.C7247304
+2026-11-17 11:03:33.754 Df chronod[32728:23a03f] [com.apple.chrono:taskservice] Popped next task of 1: timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.C7247304 from foregroundUserInteractive
+2026-11-17 11:03:33.754 Df chronod[32728:23a03f] [com.apple.chrono:taskservice] Remove pending task: timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.C7247304
+2026-11-17 11:03:33.754 Df chronod[32728:23a03f] [com.apple.chrono:taskservice] [C7247304]: starting pended task timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.C7247304; pendingTasks.count = 0
+2026-11-17 11:03:33.754 Df chronod[32728:23a4c0] [com.apple.chrono:tasksession] [C7247304]: start() with task timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.C7247304
+2026-11-17 11:03:33.754 Df chronod[32728:23a4c0] [com.apple.chrono:tasksession] [C7247304]: _taskQueue_setup() with task timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.C7247304
+2026-11-17 11:03:33.754 Df chronod[32728:23a4c0] [com.apple.chrono:session] Overriding assertion attributes in sync launch case: com.robertlevonyan.ailimits.widgets
+2026-11-17 11:03:33.756 Df chronod[32728:23a4c0] [com.apple.extensionkit:launch] Launching process with config: identity: RecordIdentity(record: ExtensionFoundation.Database._ExtensionRecord(lsRecord: <LSApplicationExtensionRecord 0x7861b6c1e0> { bundleID: com.robertlevonyan.ailimits.widgets, URL: file:///Applications/AI%20Limits.app/Contents/PlugIns/AILimitsWidget.appex/, super: <LSApplicationExtensionRecord 0x7861b6c1e0> { table: 24, unit: c58, attached: yes } })) instance: _InstanceIdentifier(_id: Optional(65D1CB5C-F603-4CCB-818C-FB6CC7892408))
+2026-11-17 11:03:33.761 E  NotificationCenter[1233:23a183] [com.apple.chrono:timeline] Content load failed: unable to find or unarchive file for key: [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)] on local. The session may still produce one shortly. Error: Using url `file:///Users/robert/Library/Containers/com.robertlevonyan.ailimits.widgets/Data/SystemData/com.apple.chrono/timelines/AILimitsClaude/systemSmall164.00w-164.00h-27.88r-kwXjBcg0jLGkOXgfIR%23vfsEQ3NEuHIIxpQplS%23DfabA=.chrono-timeline` ... Error Domain=NSCocoaErrorDomain Code=4 "The file “systemSmall164.00w-164.00h-27.88r-kwXjBcg0jLGkOXgfIR#vfsEQ3NEuHIIxpQplS#DfabA=.chrono-timeline” doesn’t exist." UserInfo={NSFilePath=/Users/robert/Library/Containers/com.robertlevonyan.ailimits.widgets/Data/SystemData/com.apple.chrono/timelines/AILimitsClaude/systemSmall164.00w-164.00h-27.88r-kwXjBcg0jLGkOXgfIR#vfsEQ3NEuHIIxpQplS#DfabA=.chrono-timeline, NSUnderlyingError=0x7bb8636f70 {Error Domain=NSPOSIXErrorDomain Code=2 "No such file or directory"}}
+2026-11-17 11:03:33.762 Df NotificationCenter[1233:2b88] [com.apple.chrono:visibility] [Timeline[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)]--WidgetInstance::nil::0x0000007bb9ee5e00)] Content reload detected - evaluating staleness.
+2026-11-17 11:03:33.762 Df NotificationCenter[1233:2b88] [com.apple.chrono:visibility] [Timeline[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)]--WidgetInstance::nil::0x0000007bb9ee5200)] Content reload detected - evaluating staleness.
+2026-11-17 11:03:33.762 Df NotificationCenter[1233:2b88] [com.apple.chrono:visibility] [Timeline[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)]--WidgetInstance::nil::0x0000007bb9ee5200)] Ignoring staleness check - not visibly settled for current view session yet.
+2026-11-17 11:03:33.765 Df chronod[32728:23a03f] [com.apple.runningboard:monitor] Received state update for 32744 (extension<com.robertlevonyan.ailimits.widgets[config:6E69CA09-34E3-3493-B8FC-B5021E1ACB71]((null):32728)(501)>[uuid:65D1CB5C-F603-4CCB-818C-FB6CC7892408], running-suspended-NotVisible
+2026-11-17 11:03:33.766 Df chronod[32728:23a4c0] [com.apple.chrono:session] [com.robertlevonyan.ailimits.widgets-DFFA994F-8D64-4180-B953-FEF9904C226F] Created a new WidgetExtensionSession at user interactive priority.
+2026-11-17 11:03:33.766 Df chronod[32728:23a4c0] [com.apple.chrono:session] [ailimits.widgets-FEF9904C226F] acquired WidgetExtensionRun-QOS-UserInitiated
+2026-11-17 11:03:33.766 Df chronod[32728:23a4c0] [com.apple.chrono:session] [ailimits.widgets-FEF9904C226F] Session initialized
+2026-11-17 11:03:33.766 Df chronod[32728:23a4c0] [com.apple.chrono:keepalive] Added: <Task 2AF677F2-88B1-4B1A-88A2-36FE3F831C68: timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>>
+2026-11-17 11:03:33.766 Df chronod[32728:23a4c0] [com.apple.chrono:tasksession] [C7247304]: _taskQueue_execute() with task timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.C7247304
+2026-11-17 11:03:33.766 Df chronod[32728:23a4c0] [com.apple.chrono:timeline.store] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] reload: begin
+2026-11-17 11:03:33.766 Df chronod[32728:23a4c0] [com.apple.chrono:keepalive] Added: Reload timeline: com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets
+2026-11-17 11:03:33.767 Df chronod[32728:23a040] [com.apple.runningboard:monitor] Received state update for 32744 (extension<com.robertlevonyan.ailimits.widgets[config:6E69CA09-34E3-3493-B8FC-B5021E1ACB71]((null):32728)(501)>[uuid:65D1CB5C-F603-4CCB-818C-FB6CC7892408], running-active-NotVisible
+2026-11-17 11:03:33.770 Df chronod[32728:23a4c0] [com.apple.chrono:session] [ailimits.widgets-FEF9904C226F] Session operation: `getTimelines(1)` request.
+2026-11-17 11:03:33.770 Df chronod[32728:23a4c0] [com.apple.chrono:session] [ailimits.widgets-FEF9904C226F] Session operation: `getTimelines(1)` executing.
+2026-11-17 11:03:33.771 Df AILimitsWidget[32744:239cfe] [com.apple.chrono:timeline] Batch begin (ti-4c5e7a) - locale: en_US (fixed en_US)
+2026-11-17 11:03:33.771 Df AILimitsWidget[32744:239cfe] [com.apple.chrono:timeline] intent = nil
+2026-11-17 11:03:33.771 Df AILimitsWidget[32744:239cfe] [com.apple.chrono:timeline] Request began for AILimitsClaude:systemSmall:(noIntent) - to archive: /private/var/folders/r4/mc4ljfb15_qdgbl1hvqyzmdr0000gn/T/com.apple.chrono/TemporaryItems/NSIRD_chronod_zEiKUW/systemSmall164.00w-164.00h-27.88r-kwXjBcg0jLGkOXgfIR#vfsEQ3NEuHIIxpQplS#DfabA=.chrono-timeline
+2026-11-17 11:03:33.771 A  AILimitsWidget[32744:eda34] (libsystem_containermanager.dylib) container_create_or_lookup_app_group_path_by_app_group_identifier
+2026-11-17 11:03:33.771 Df AILimitsWidget[32744:eda34] [com.apple.containermanager:unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: success
+2026-11-17 11:03:33.773 Df AILimitsWidget[32744:eda34] [com.apple.chrono:widget] Archive deployment version: DeploymentVersion(base: SwiftUI.ArchivedViewInput.DeploymentVersion(rawValue: 5))
+2026-11-17 11:03:33.773 Df AILimitsWidget[32744:eda34] [com.apple.chrono:widget] Supports content layers? true, archiveVersion=2720
+2026-11-17 11:03:33.778 Df AILimitsWidget[32744:eda34] [com.apple.chrono:archiving] Filtered image [1: 256-256]: exit (no size constraints configured)
+2026-11-17 11:03:33.786 Df AILimitsWidget[32744:eda34] [com.apple.chrono:widget] Supports content layers? true, archiveVersion=2720
+2026-11-17 11:03:33.793 Df AILimitsWidget[32744:eda34] [com.apple.chrono:widget] Supports content layers? true, archiveVersion=2720
+2026-11-17 11:03:33.799 Df AILimitsWidget[32744:eda34] [com.apple.chrono:widget] Supports content layers? true, archiveVersion=2720
+2026-11-17 11:03:33.805 Df AILimitsWidget[32744:eda34] [com.apple.chrono:widget] Supports content layers? true, archiveVersion=2720
+2026-11-17 11:03:33.810 Df AILimitsWidget[32744:eda34] [com.apple.chrono:widget] Supports content layers? true, archiveVersion=2720
+2026-11-17 11:03:33.814 Df AILimitsWidget[32744:eda34] [com.apple.chrono:widget] Supports content layers? true, archiveVersion=2720
+2026-11-17 11:03:33.816 Df AILimitsWidget[32744:eda34] [com.apple.chrono:timeline] Request ended for AILimitsClaude:systemSmall:(noIntent) - success
+2026-11-17 11:03:33.816 Df AILimitsWidget[32744:eda34] [com.apple.chrono:timeline] Batch end (ti-4c5e7a) - success
+2026-11-17 11:03:33.817 Df chronod[32728:23a4c0] [com.apple.chrono:session] [ailimits.widgets-FEF9904C226F] Session operation: `getTimelines(1)` result.
+2026-11-17 11:03:33.818 Df chronod[32728:23a4c0] [com.apple.chrono:archiving] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)] on local-file:///Users/robert/Library/Containers/com.robertlevonyan.ailimits.widgets/Data/SystemData/com.apple.chrono/timelines/AILimitsClaude/systemSmall164.00w-164.00h-27.88r-kwXjBcg0jLGkOXgfIR%23vfsEQ3NEuHIIxpQplS%23DfabA=.chrono-timeline destroying promise for 'Accept failed.' - </var/folders/r4/mc4ljfb15_qdgbl1hvqyzmdr0000gn/T/com.apple.chrono//TemporaryItems/NSIRD_chronod_zEiKUW/systemSmall164.00w-164.00h-27.88r-kwXjBcg0jLGkOXgfIR#vfsEQ3NEuHIIxpQplS#DfabA=.chrono-timeline>
+2026-11-17 11:03:33.819 E  chronod[32728:23a4c0] [com.apple.chrono:timeline.store] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)] on local reload: failed with error WidgetKit.WidgetArchiver.ValidationError.bundleStubNotSupported(underlyingError: WidgetKit.WidgetArchiver.(unknown context at $1b298e604).SimpleError.message("Bundle version did not match; LaunchServices DB may need to be rebuilt")))
+2026-11-17 11:03:33.819 Df chronod[32728:23a4c0] [com.apple.chrono:timeline.store] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] reload: failed
+2026-11-17 11:03:33.819 Df chronod[32728:23a4c0] [com.apple.chrono:session] [ailimits.widgets-FEF9904C226F] acquired WaitForWidgetSuspension
+2026-11-17 11:03:33.819 Df chronod[32728:23a4c0] [com.apple.chrono:session] [ailimits.widgets-FEF9904C226F] WidgetExtensionAssertion invalidated
+2026-11-17 11:03:33.819 Df chronod[32728:23a4c0] [com.apple.chrono:session] [ailimits.widgets-FEF9904C226F] Session invalidated
+2026-11-17 11:03:33.820 Df chronod[32728:23a4c0] [com.apple.chrono:keepalive] Removed: Reload timeline: com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets
+2026-11-17 11:03:33.820 Df chronod[32728:23a03f] [com.apple.chrono:keepalive] Removed: <Task 2AF677F2-88B1-4B1A-88A2-36FE3F831C68: timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>>
+2026-11-17 11:03:33.820 Df chronod[32728:23a4c0] [com.apple.chrono:session] [ailimits.widgets-FEF9904C226F] Session operation: `getTimelines(1)` finished.
+2026-11-17 11:03:33.820 Df chronod[32728:23a03f] [com.apple.chrono:tasksession] [C7247304]: _taskQueue_evaluate() with task timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.C7247304
+2026-11-17 11:03:33.820 Df chronod[32728:23a03f] [com.apple.chrono:tasksession] [C7247304]: _taskQueue_teardown() with task timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.C7247304
+2026-11-17 11:03:33.820 Df chronod[32728:23a03f] [com.apple.chrono:tasksession] [C7247304]: _taskQueue_complete() with task timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.C7247304
+2026-11-17 11:03:33.820 Df chronod[32728:23a4b9] [com.apple.chrono:timeline.store] Task [22804] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Completed
+2026-11-17 11:03:33.820 Df chronod[32728:23a4b9] [com.apple.chrono:timeline.store] record reload: [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] = externalRequest([source:<BSProcessHandle: 0x786274ed60; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false
+2026-11-17 11:03:33.820 Df chronod[32728:23a4c0] [com.apple.chrono:session] Connection to extension process was invalidated: com.robertlevonyan.ailimits.widgets
+2026-11-17 11:03:33.820 Df chronod[32728:23a040] [com.apple.chrono:session] [ailimits.widgets-FEF9904C226F] Session deinit
+2026-11-17 11:03:33.820 Df chronod[32728:23a4b9] [com.apple.chrono:timeline.store] Task [22804] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Reload failure
+2026-11-17 11:03:33.820 E  chronod[32728:23a4b9] [com.apple.chrono:timeline.store] Task [22804] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Reload failed; 0 retries remaining: CHSErrorDomain (1050) Error Domain=CHSErrorDomain Code=1050 "timelineReloadFailed" UserInfo={NSDebugDescription=timelineReloadFailed}
+2026-11-17 11:03:33.820 Df chronod[32728:23a4b9] [com.apple.chrono:timeline.store] Task [22804] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] New state: reload
+2026-11-17 11:03:33.820 Df chronod[32728:23a4b9] [com.apple.chrono:timeline.store] Task [22804] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Follow-on reload from completion needed: [[externalRequest([source:<BSProcessHandle: 0x786274ed60; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false-immediate-budgeted-0]]
+2026-11-17 11:03:33.820 Df chronod[32728:23a4b9] [com.apple.chrono:timeline.store] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Reload with configuration [externalRequest([source:<BSProcessHandle: 0x786274ed60; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false-immediate-budgeted-0]
+2026-11-17 11:03:33.820 Df chronod[32728:23a4b9] [com.apple.chrono:timeline.store] Task [22805] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Preparing reload
+2026-11-17 11:03:33.820 Df chronod[32728:23a4b9] [com.apple.chrono:timeline.store] Task [22805] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Dispatching new task
+2026-11-17 11:03:33.820 Df chronod[32728:23a4b9] [com.apple.chrono:timeline.store] Task [22805] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Scheduling reload with configuration: [externalRequest([source:<BSProcessHandle: 0x786274ed60; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false-immediate-budgeted-0]
+2026-11-17 11:03:33.820 Df chronod[32728:23a4b9] [com.apple.chrono:timeline.store] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Not checking cache (externalRequest([source:<BSProcessHandle: 0x786274ed60; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false)
+2026-11-17 11:03:33.820 Df chronod[32728:23a4b9] [com.apple.chrono:timeline.store] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] scheduled [externalRequest([source:<BSProcessHandle: 0x786274ed60; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false-immediate-budgeted-0]
+2026-11-17 11:03:33.820 Df chronod[32728:23a4b9] [com.apple.chrono:taskservice] [D8AA49BC]: task submitted timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.D8AA49BC
+2026-11-17 11:03:33.820 Df chronod[32728:23a4b9] [com.apple.chrono:timeline.store] Task [22805] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Scheduled with cancellable token: [<TaskService.TaskCancellable: TaskID: D8AA49BC>]
+2026-11-17 11:03:33.820 Df chronod[32728:23a040] [com.apple.chrono:taskservice] Add pending task: timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.D8AA49BC
+2026-11-17 11:03:33.821 Df chronod[32728:23a040] [com.apple.chrono:taskservice] Popped next task of 1: timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.D8AA49BC from foregroundUserInteractive
+2026-11-17 11:03:33.821 Df chronod[32728:23a040] [com.apple.chrono:taskservice] Remove pending task: timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.D8AA49BC
+2026-11-17 11:03:33.821 Df chronod[32728:23a040] [com.apple.chrono:taskservice] [D8AA49BC]: starting pended task timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.D8AA49BC; pendingTasks.count = 0
+2026-11-17 11:03:33.821 Df chronod[32728:23a4b9] [com.apple.chrono:tasksession] [D8AA49BC]: start() with task timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.D8AA49BC
+2026-11-17 11:03:33.821 Df chronod[32728:23a4b9] [com.apple.chrono:tasksession] [D8AA49BC]: _taskQueue_setup() with task timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.D8AA49BC
+2026-11-17 11:03:33.821 Df chronod[32728:23a4b9] [com.apple.chrono:session] Overriding assertion attributes in sync launch case: com.robertlevonyan.ailimits.widgets
+2026-11-17 11:03:33.822 Df chronod[32728:23a4b9] [com.apple.extensionkit:launch] Launching process with config: identity: RecordIdentity(record: ExtensionFoundation.Database._ExtensionRecord(lsRecord: <LSApplicationExtensionRecord 0x7861b6c1e0> { bundleID: com.robertlevonyan.ailimits.widgets, URL: file:///Applications/AI%20Limits.app/Contents/PlugIns/AILimitsWidget.appex/, super: <LSApplicationExtensionRecord 0x7861b6c1e0> { table: 24, unit: c58, attached: yes } })) instance: _InstanceIdentifier(_id: Optional(65D1CB5C-F603-4CCB-818C-FB6CC7892408))
+2026-11-17 11:03:33.827 E  NotificationCenter[1233:239a26] [com.apple.chrono:timeline] Content load failed: unable to find or unarchive file for key: [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)] on local. The session may still produce one shortly. Error: Using url `file:///Users/robert/Library/Containers/com.robertlevonyan.ailimits.widgets/Data/SystemData/com.apple.chrono/timelines/AILimitsClaude/systemSmall164.00w-164.00h-27.88r-kwXjBcg0jLGkOXgfIR%23vfsEQ3NEuHIIxpQplS%23DfabA=.chrono-timeline` ... Error Domain=NSCocoaErrorDomain Code=4 "The file “systemSmall164.00w-164.00h-27.88r-kwXjBcg0jLGkOXgfIR#vfsEQ3NEuHIIxpQplS#DfabA=.chrono-timeline” doesn’t exist." UserInfo={NSFilePath=/Users/robert/Library/Containers/com.robertlevonyan.ailimits.widgets/Data/SystemData/com.apple.chrono/timelines/AILimitsClaude/systemSmall164.00w-164.00h-27.88r-kwXjBcg0jLGkOXgfIR#vfsEQ3NEuHIIxpQplS#DfabA=.chrono-timeline, NSUnderlyingError=0x7bb86376c0 {Error Domain=NSPOSIXErrorDomain Code=2 "No such file or directory"}}
+2026-11-17 11:03:33.827 Df NotificationCenter[1233:2b88] [com.apple.chrono:visibility] [Timeline[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)]--WidgetInstance::nil::0x0000007bb9ee5e00)] Content reload detected - evaluating staleness.
+2026-11-17 11:03:33.827 Df NotificationCenter[1233:2b88] [com.apple.chrono:visibility] [Timeline[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)]--WidgetInstance::nil::0x0000007bb9ee5200)] Content reload detected - evaluating staleness.
+2026-11-17 11:03:33.827 Df NotificationCenter[1233:2b88] [com.apple.chrono:visibility] [Timeline[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)]--WidgetInstance::nil::0x0000007bb9ee5200)] Ignoring staleness check - not visibly settled for current view session yet.
+2026-11-17 11:03:33.830 Df chronod[32728:23a4b9] [com.apple.chrono:session] [com.robertlevonyan.ailimits.widgets-DCE94A60-9961-4A2A-B3C6-AB1B11C5CF0C] Created a new WidgetExtensionSession at user interactive priority.
+2026-11-17 11:03:33.831 Df chronod[32728:23a4b9] [com.apple.chrono:session] [ailimits.widgets-AB1B11C5CF0C] acquired WidgetExtensionRun-QOS-UserInitiated
+2026-11-17 11:03:33.831 Df chronod[32728:23a4b9] [com.apple.chrono:session] [ailimits.widgets-AB1B11C5CF0C] Session initialized
+2026-11-17 11:03:33.831 Df chronod[32728:23a4b9] [com.apple.chrono:keepalive] Added: <Task EA715C2A-7E21-4A83-A9BC-9CFA5BB03BE1: timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>>
+2026-11-17 11:03:33.831 Df chronod[32728:23a4b9] [com.apple.chrono:tasksession] [D8AA49BC]: _taskQueue_execute() with task timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.D8AA49BC
+2026-11-17 11:03:33.831 Df chronod[32728:23a4b9] [com.apple.chrono:timeline.store] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] reload: begin
+2026-11-17 11:03:33.831 Df chronod[32728:23a4b9] [com.apple.chrono:keepalive] Added: Reload timeline: com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets
+2026-11-17 11:03:33.833 Df chronod[32728:23a4b9] [com.apple.chrono:session] [ailimits.widgets-AB1B11C5CF0C] Session operation: `getTimelines(1)` request.
+2026-11-17 11:03:33.834 Df chronod[32728:23a4b9] [com.apple.chrono:session] [ailimits.widgets-AB1B11C5CF0C] Session operation: `getTimelines(1)` executing.
+2026-11-17 11:03:33.835 Df AILimitsWidget[32744:2372a2] [com.apple.chrono:timeline] Batch begin (ti-341a72) - locale: en_US (fixed en_US)
+2026-11-17 11:03:33.835 Df AILimitsWidget[32744:2372a2] [com.apple.chrono:timeline] intent = nil
+2026-11-17 11:03:33.835 Df AILimitsWidget[32744:2372a2] [com.apple.chrono:timeline] Request began for AILimitsClaude:systemSmall:(noIntent) - to archive: /private/var/folders/r4/mc4ljfb15_qdgbl1hvqyzmdr0000gn/T/com.apple.chrono/TemporaryItems/NSIRD_chronod_zBgEo2/systemSmall164.00w-164.00h-27.88r-kwXjBcg0jLGkOXgfIR#vfsEQ3NEuHIIxpQplS#DfabA=.chrono-timeline
+2026-11-17 11:03:33.835 A  AILimitsWidget[32744:eda34] (libsystem_containermanager.dylib) container_create_or_lookup_app_group_path_by_app_group_identifier
+2026-11-17 11:03:33.835 Df AILimitsWidget[32744:eda34] [com.apple.containermanager:unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: success
+2026-11-17 11:03:33.835 Df AILimitsWidget[32744:eda34] [com.apple.chrono:widget] Archive deployment version: DeploymentVersion(base: SwiftUI.ArchivedViewInput.DeploymentVersion(rawValue: 5))
+2026-11-17 11:03:33.836 Df AILimitsWidget[32744:eda34] [com.apple.chrono:widget] Supports content layers? true, archiveVersion=2720
+2026-11-17 11:03:33.838 Df AILimitsWidget[32744:eda34] [com.apple.chrono:archiving] Filtered image [1: 256-256]: exit (no size constraints configured)
+2026-11-17 11:03:33.841 Df AILimitsWidget[32744:eda34] [com.apple.chrono:widget] Supports content layers? true, archiveVersion=2720
+2026-11-17 11:03:33.845 Df AILimitsWidget[32744:eda34] [com.apple.chrono:widget] Supports content layers? true, archiveVersion=2720
+2026-11-17 11:03:33.848 Df AILimitsWidget[32744:eda34] [com.apple.chrono:widget] Supports content layers? true, archiveVersion=2720
+2026-11-17 11:03:33.851 Df AILimitsWidget[32744:eda34] [com.apple.chrono:widget] Supports content layers? true, archiveVersion=2720
+2026-11-17 11:03:33.854 Df AILimitsWidget[32744:eda34] [com.apple.chrono:widget] Supports content layers? true, archiveVersion=2720
+2026-11-17 11:03:33.856 Df AILimitsWidget[32744:eda34] [com.apple.chrono:widget] Supports content layers? true, archiveVersion=2720
+2026-11-17 11:03:33.859 Df AILimitsWidget[32744:eda34] [com.apple.chrono:timeline] Request ended for AILimitsClaude:systemSmall:(noIntent) - success
+2026-11-17 11:03:33.859 Df AILimitsWidget[32744:eda34] [com.apple.chrono:timeline] Batch end (ti-341a72) - success
+2026-11-17 11:03:33.859 Df chronod[32728:23a4c0] [com.apple.chrono:session] [ailimits.widgets-AB1B11C5CF0C] Session operation: `getTimelines(1)` result.
+2026-11-17 11:03:33.860 Df chronod[32728:23a4c0] [com.apple.chrono:archiving] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)] on local-file:///Users/robert/Library/Containers/com.robertlevonyan.ailimits.widgets/Data/SystemData/com.apple.chrono/timelines/AILimitsClaude/systemSmall164.00w-164.00h-27.88r-kwXjBcg0jLGkOXgfIR%23vfsEQ3NEuHIIxpQplS%23DfabA=.chrono-timeline destroying promise for 'Accept failed.' - </var/folders/r4/mc4ljfb15_qdgbl1hvqyzmdr0000gn/T/com.apple.chrono//TemporaryItems/NSIRD_chronod_zBgEo2/systemSmall164.00w-164.00h-27.88r-kwXjBcg0jLGkOXgfIR#vfsEQ3NEuHIIxpQplS#DfabA=.chrono-timeline>
+2026-11-17 11:03:33.868 E  chronod[32728:23a4c0] [com.apple.chrono:timeline.store] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)] on local reload: failed with error WidgetKit.WidgetArchiver.ValidationError.bundleStubNotSupported(underlyingError: WidgetKit.WidgetArchiver.(unknown context at $1b298e604).SimpleError.message("Bundle version did not match; LaunchServices DB may need to be rebuilt")))
+2026-11-17 11:03:33.868 Df chronod[32728:23a4c0] [com.apple.chrono:timeline.store] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] reload: failed
+2026-11-17 11:03:33.868 Df chronod[32728:23a4c0] [com.apple.chrono:session] [ailimits.widgets-AB1B11C5CF0C] acquired WaitForWidgetSuspension
+2026-11-17 11:03:33.868 Df chronod[32728:23a4c0] [com.apple.chrono:session] [ailimits.widgets-AB1B11C5CF0C] WidgetExtensionAssertion invalidated
+2026-11-17 11:03:33.868 Df chronod[32728:23a4c0] [com.apple.chrono:session] [ailimits.widgets-AB1B11C5CF0C] Session invalidated
+2026-11-17 11:03:33.869 Df chronod[32728:23a4c0] [com.apple.chrono:keepalive] Removed: Reload timeline: com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets
+2026-11-17 11:03:33.869 Df chronod[32728:23a4ba] [com.apple.chrono:keepalive] Removed: <Task EA715C2A-7E21-4A83-A9BC-9CFA5BB03BE1: timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>>
+2026-11-17 11:03:33.869 Df chronod[32728:23a4c0] [com.apple.chrono:session] [ailimits.widgets-AB1B11C5CF0C] Session operation: `getTimelines(1)` finished.
+2026-11-17 11:03:33.869 Df chronod[32728:23a4ba] [com.apple.chrono:tasksession] [D8AA49BC]: _taskQueue_evaluate() with task timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.D8AA49BC
+2026-11-17 11:03:33.869 Df chronod[32728:23a4ba] [com.apple.chrono:tasksession] [D8AA49BC]: _taskQueue_teardown() with task timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.D8AA49BC
+2026-11-17 11:03:33.869 Df chronod[32728:23a4ba] [com.apple.chrono:tasksession] [D8AA49BC]: _taskQueue_complete() with task timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.D8AA49BC
+2026-11-17 11:03:33.869 Df chronod[32728:23a03f] [com.apple.chrono:timeline.store] Task [22805] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Completed
+2026-11-17 11:03:33.869 Df chronod[32728:23a03f] [com.apple.chrono:timeline.store] record reload: [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] = externalRequest([source:<BSProcessHandle: 0x786274ed60; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false
+2026-11-17 11:03:33.869 Df chronod[32728:23a4b9] [com.apple.chrono:session] [ailimits.widgets-AB1B11C5CF0C] Session deinit
+2026-11-17 11:03:33.869 Df chronod[32728:23a4c0] [com.apple.chrono:session] Connection to extension process was invalidated: com.robertlevonyan.ailimits.widgets
+2026-11-17 11:03:33.869 Df chronod[32728:23a03f] [com.apple.chrono:timeline.store] Task [22805] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Reload failure
+2026-11-17 11:03:33.869 E  chronod[32728:23a03f] [com.apple.chrono:timeline.store] Task [22805] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Reload failed; next attempt due at 2026-11-17T12:03:33+04:00: CHSErrorDomain (1050) Error Domain=CHSErrorDomain Code=1050 "timelineReloadFailed" UserInfo={NSDebugDescription=timelineReloadFailed}
+2026-11-17 11:03:33.869 Df chronod[32728:23a03f] [com.apple.chrono:timeline.store] Task [22805] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] New state: failed
+2026-11-17 11:03:33.869 Df chronod[32728:23a03f] [com.apple.chrono:timeline.store] Task [22805] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Follow-on reload from completion needed: [[scheduledRetry(externalRequest([source:<BSProcessHandle: 0x786274ed60; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false)-2026-11-17T12:03:33+04:00-budgeted-1]]
+2026-11-17 11:03:33.869 Df chronod[32728:23a03f] [com.apple.chrono:timeline.store] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Reload with configuration [scheduledRetry(externalRequest([source:<BSProcessHandle: 0x786274ed60; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false)-2026-11-17T12:03:33+04:00-budgeted-1]
+2026-11-17 11:03:33.869 Df chronod[32728:23a03f] [com.apple.chrono:timeline.store] Task [22806] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Preparing reload
+2026-11-17 11:03:33.869 Df chronod[32728:23a03f] [com.apple.chrono:timeline.store] Task [22806] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Dispatching new task
+2026-11-17 11:03:33.869 Df chronod[32728:23a03f] [com.apple.chrono:timeline.store] Task [22806] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Scheduling reload with configuration: [scheduledRetry(externalRequest([source:<BSProcessHandle: 0x786274ed60; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false)-2026-11-17T12:03:33+04:00-budgeted-1]
+2026-11-17 11:03:33.869 Df chronod[32728:23a03f] [com.apple.chrono:timeline.store] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Not checking cache (scheduledRetry(externalRequest([source:<BSProcessHandle: 0x786274ed60; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false))
+2026-11-17 11:03:33.869 Df chronod[32728:23a03f] [com.apple.chrono:timeline.store] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] scheduled [scheduledRetry(externalRequest([source:<BSProcessHandle: 0x786274ed60; AI Limits:61659; valid: YES>], reason: WidgetCenterServer, scheduleImmediately: false)-2026-11-17T12:03:33+04:00-budgeted-1]
+2026-11-17 11:03:33.869 Df chronod[32728:23a03f] [com.apple.chrono:taskservice] [C1AADCBE]: task submitted timeline<com.apple.chronod.timeline-host::[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude]>.C1AADCBE
+2026-11-17 11:03:33.869 Df chronod[32728:23a03f] [com.apple.chrono:timeline.store] Task [22806] [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude] Scheduled with cancellable token: [<TaskService.TaskCancellable: TaskID: C1AADCBE>]
+2026-11-17 11:03:33.873 Df chronod[32728:23a03f] [com.apple.runningboard:monitor] Received state update for 32744 (extension<com.robertlevonyan.ailimits.widgets[config:6E69CA09-34E3-3493-B8FC-B5021E1ACB71]((null):32728)(501)>[uuid:65D1CB5C-F603-4CCB-818C-FB6CC7892408], running-active-NotVisible
+2026-11-17 11:03:33.877 E  NotificationCenter[1233:239a26] [com.apple.chrono:timeline] Content load failed: unable to find or unarchive file for key: [com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)] on local. The session may still produce one shortly. Error: Using url `file:///Users/robert/Library/Containers/com.robertlevonyan.ailimits.widgets/Data/SystemData/com.apple.chrono/timelines/AILimitsClaude/systemSmall164.00w-164.00h-27.88r-kwXjBcg0jLGkOXgfIR%23vfsEQ3NEuHIIxpQplS%23DfabA=.chrono-timeline` ... Error Domain=NSCocoaErrorDomain Code=4 "The file “systemSmall164.00w-164.00h-27.88r-kwXjBcg0jLGkOXgfIR#vfsEQ3NEuHIIxpQplS#DfabA=.chrono-timeline” doesn’t exist." UserInfo={NSFilePath=/Users/robert/Library/Containers/com.robertlevonyan.ailimits.widgets/Data/SystemData/com.apple.chrono/timelines/AILimitsClaude/systemSmall164.00w-164.00h-27.88r-kwXjBcg0jLGkOXgfIR#vfsEQ3NEuHIIxpQplS#DfabA=.chrono-timeline, NSUnderlyingError=0x7bb8637b70 {Error Domain=NSPOSIXErrorDomain Code=2 "No such file or directory"}}
+2026-11-17 11:03:33.877 Df NotificationCenter[1233:2b88] [com.apple.chrono:visibility] [Timeline[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)]--WidgetInstance::nil::0x0000007bb9ee5e00)] Content reload detected - evaluating staleness.
+2026-11-17 11:03:33.877 Df NotificationCenter[1233:2b88] [com.apple.chrono:visibility] [Timeline[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)]--WidgetInstance::nil::0x0000007bb9ee5200)] Content reload detected - evaluating staleness.
+2026-11-17 11:03:33.877 Df NotificationCenter[1233:2b88] [com.apple.chrono:visibility] [Timeline[com.robertlevonyan.ailimits::com.robertlevonyan.ailimits.widgets:AILimitsClaude:systemSmall::164.00/164.00/27.88:(null)~(null)]--WidgetInstance::nil::0x0000007bb9ee5200)] Ignoring staleness check - not visibly settled for current view session yet.
+2026-11-17 11:03:33.927 Df chronod[32728:23a03f] [com.apple.runningboard:monitor] Received state update for 32744 (extension<com.robertlevonyan.ailimits.widgets[config:6E69CA09-34E3-3493-B8FC-B5021E1ACB71]((null):32728)(501)>[uuid:65D1CB5C-F603-4CCB-818C-FB6CC7892408], running-suspended-NotVisible
+2026-11-17 11:03:34.082 Df chronod[32728:23a4b9] [com.apple.runningboard:monitor] Received state update for 32744 (extension<com.robertlevonyan.ailimits.widgets[config:6E69CA09-34E3-3493-B8FC-B5021E1ACB71]((null):32728)(501)>[uuid:65D1CB5C-F603-4CCB-818C-FB6CC7892408], running-suspended-NotVisible

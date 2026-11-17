@@ -224,6 +224,7 @@ final class UpdateChecker: ObservableObject {
         rm -rf "\(appURL.path)"
         /usr/bin/ditto "\(newApp.path)" "\(appURL.path)"
         /usr/bin/xattr -dr com.apple.quarantine "\(appURL.path)" 2>/dev/null
+        /usr/bin/pkill -x AILimitsWidget 2>/dev/null
         /usr/bin/open "\(appURL.path)"
         rm -rf "\(newApp.deletingLastPathComponent().path)"
         """

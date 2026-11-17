@@ -48,10 +48,26 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         MainActor.assumeIsolated {
             let model = AppModel.shared
             NSApp.setActivationPolicy(model.settings.showInDock ? .regular : .accessory)
+            Self.restartWidgetExtension()
             // Opening the app yourself (Finder, Launchpad, Spotlight, Xcode) shows Settings;
             // starting silently at login does not.
             if !Self.launchedAsLoginItem() {
                 SettingsWindowController.shared.show()
+            }
+        }
+    }
+
+    /// After an update the old widget process keeps running, and macOS then rejects everything it draws
+    /// ("Bundle version did not match") — the widgets stay grey. Re-register this copy and stop the widget
+    /// process; macOS starts the new one on the next redraw.
+    nonisolated static func restartWidgetExtension() {
+        let bundlePath = Bundle.main.bundlePath
+        DispatchQueue.global(qos: .utility).async {
+            let lsregister = "/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"
+            _ = Shell.run(lsregister, ["-f", bundlePath])
+            _ = Shell.run("/usr/bin/pkill", ["-x", "AILimitsWidget"])
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                MainActor.assumeIsolated { AppModel.shared.service.reloadWidgets() }
             }
         }
     }
